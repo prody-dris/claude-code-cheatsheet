@@ -4,331 +4,355 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Code Cheatsheet — Nihaan</title>
-<meta name="description" content="Compact Claude Code cheatsheet — best practices, setup patterns, and workflow habits. By Nihaan Mohammed.">
+<meta name="description" content="Compact Claude Code cheatsheet — session hygiene, workflow habits, token efficiency, auto mode, and setup patterns. Curated by Nihaan Mohammed.">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
-    --bg: #FAF9F6;
-    --surface: #FFFFFF;
-    --border: #E8E4DC;
-    --border-strong: #D4CFC5;
+    --bg: #F7F5F0;
     --text: #1A1A1A;
-    --text-mid: #4A4A4A;
-    --text-dim: #7A7A72;
-    --gold: #C8A415;
-    --gold-light: #F5EFD5;
-    --gold-dark: #9A7D0A;
-    --black: #111111;
-    --pixel: #2D2D2D;
-    --code-bg: #1A1A1A;
-    --code-text: #E5C54B;
+    --text-mid: #444444;
+    --text-light: #8A8A82;
+    --gold: #B8960C;
+    --gold-bg: rgba(184, 150, 12, 0.07);
+    --red-bg: rgba(160, 40, 40, 0.05);
+    --red: #A03030;
+    --rule: rgba(0,0,0,0.06);
+    --code-bg: #1E1E1E;
+    --code-fg: #E2C44B;
+    --carpet: #C8960F;
+    --carpet-dark: #5C440A;
+    --carpet-red: #9B3322;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
-    font-size: 13.5px;
-    line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.7;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Subtle Yantra-inspired geometric header accent */
-  .yantra {
-    width: 100%;
-    height: 4px;
-    background: repeating-linear-gradient(
-      90deg,
-      var(--gold) 0px, var(--gold) 8px,
-      transparent 8px, transparent 12px,
-      var(--black) 12px, var(--black) 14px,
-      transparent 14px, transparent 18px
-    );
-    position: sticky;
+  /* ── Indian carpet border ── */
+  /* Inspired by Dhurrie / Kilim geometric weave patterns */
+  body::before, body::after {
+    content: '';
+    position: fixed;
     top: 0;
+    bottom: 0;
+    width: 28px;
     z-index: 10;
+    background:
+      /* Diamond chain */
+      repeating-linear-gradient(
+        180deg,
+        var(--carpet) 0px, var(--carpet) 2px,
+        transparent 2px, transparent 6px,
+        var(--carpet-dark) 6px, var(--carpet-dark) 8px,
+        transparent 8px, transparent 12px,
+        var(--carpet-red) 12px, var(--carpet-red) 14px,
+        transparent 14px, transparent 18px,
+        var(--carpet) 18px, var(--carpet) 20px,
+        transparent 20px, transparent 28px
+      ),
+      /* Stepped zigzag overlay */
+      repeating-linear-gradient(
+        180deg,
+        transparent 0px, transparent 14px,
+        var(--carpet-dark) 14px, var(--carpet-dark) 16px,
+        transparent 16px, transparent 28px
+      ),
+      /* Base stripe */
+      linear-gradient(90deg,
+        var(--carpet-dark) 0px, var(--carpet-dark) 3px,
+        rgba(200, 150, 15, 0.15) 3px, rgba(200, 150, 15, 0.15) 25px,
+        var(--carpet-dark) 25px, var(--carpet-dark) 28px
+      );
   }
+  body::before { left: 0; }
+  body::after { right: 0; }
 
-  .container {
-    max-width: 740px;
+  .page {
+    max-width: 660px;
     margin: 0 auto;
-    padding: 36px 24px 48px;
+    padding: 44px 28px 52px;
   }
 
-  /* Header / Mark */
-  .mark {
-    margin-bottom: 32px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--black);
+  /* ── Header ── */
+  header {
+    margin-bottom: 36px;
   }
-  .mark h1 {
-    font-size: 22px;
+  header h1 {
+    font-size: 21px;
     font-weight: 700;
-    color: var(--black);
-    letter-spacing: -0.5px;
-    margin-bottom: 2px;
+    letter-spacing: -0.3px;
   }
-  .mark h1 span {
-    color: var(--gold);
+  header h1 span { color: var(--gold); }
+  header .meta {
+    font-size: 12.5px;
+    color: var(--text-light);
+    margin-top: 2px;
   }
-  .mark .byline {
+  header .quip {
     font-size: 12px;
-    color: var(--text-dim);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-  .mark .updated {
-    float: right;
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-top: 4px;
+    color: var(--text-light);
+    font-style: italic;
+    margin-top: 6px;
+    opacity: 0.7;
   }
 
-  /* Sections */
-  .section {
+  /* ── Section ── */
+  section {
     margin-bottom: 28px;
   }
-  .section-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-  }
-  .section-head h2 {
+  section h2 {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--text-mid);
+    letter-spacing: 2.5px;
+    color: var(--gold);
+    margin-bottom: 4px;
   }
-  .section-head .pip {
-    width: 6px; height: 6px;
-    background: var(--gold);
-    display: inline-block;
+  section h2 small {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-light);
+    font-size: 11px;
+  }
+  .aside {
+    font-size: 11.5px;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    font-style: italic;
   }
 
-  /* Command rows */
-  .row {
+  /* ── Rows ── */
+  .r {
     display: flex;
     align-items: baseline;
-    padding: 6px 0;
+    gap: 14px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--rule);
   }
-  .row + .row {
-    border-top: 1px solid var(--border);
-  }
-  .k {
+  .r:last-child { border-bottom: none; }
+
+  code {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     font-weight: 500;
     background: var(--code-bg);
-    color: var(--code-text);
-    padding: 2px 8px;
+    color: var(--code-fg);
+    padding: 2px 7px;
     border-radius: 3px;
-    min-width: 150px;
-    flex-shrink: 0;
-    text-align: center;
-  }
-  .v {
-    color: var(--text-mid);
-    font-size: 13px;
-    padding-left: 14px;
+    white-space: nowrap;
   }
 
-  /* Numbered items */
-  .item {
+  .r code:first-child {
+    min-width: 120px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .r span, .n p {
+    color: var(--text-mid);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Numbered items ── */
+  .n {
     display: flex;
     gap: 10px;
     padding: 7px 0;
+    border-bottom: 1px solid var(--rule);
   }
-  .item + .item {
-    border-top: 1px solid var(--border);
-  }
-  .n {
+  .n:last-child { border-bottom: none; }
+
+  .n i {
+    font-style: normal;
     font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 11px;
-    color: var(--gold-dark);
-    background: var(--gold-light);
-    min-width: 22px;
-    height: 22px;
+    min-width: 20px;
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 3px;
     flex-shrink: 0;
-    margin-top: 1px;
+    margin-top: 3px;
+    background: var(--gold-bg);
+    color: var(--gold);
   }
-  .t {
-    color: var(--text-mid);
-    font-size: 13px;
+  .n i.x {
+    background: var(--red-bg);
+    color: var(--red);
   }
-  .t strong {
+
+  .n p strong {
     color: var(--text);
     font-weight: 600;
   }
-  .code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11.5px;
-    background: var(--code-bg);
-    color: var(--code-text);
-    padding: 1px 6px;
-    border-radius: 3px;
-  }
 
-  /* Two-column grid */
-  .grid {
+  /* ── Two-col ── */
+  .cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 0 28px;
   }
 
-  /* Anti-pattern marker */
-  .x {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 11px;
-    color: #B91C1C;
-    background: #FEE2E2;
-    min-width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 3px;
-    flex-shrink: 0;
-    margin-top: 1px;
+  /* ── Callout ── */
+  .callout {
+    background: var(--gold-bg);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    border-radius: 0 5px 5px 0;
+    margin-bottom: 8px;
   }
+  .callout p {
+    font-size: 13.5px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .callout strong { color: var(--text); }
 
-  /* Footer */
-  .foot {
-    margin-top: 32px;
-    padding-top: 16px;
-    border-top: 2px solid var(--black);
+  /* ── Footer ── */
+  footer {
+    margin-top: 36px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
   }
-  .foot-links a {
-    font-size: 12px;
-    color: var(--text-dim);
+  footer a {
+    font-size: 11.5px;
+    color: var(--text-light);
     text-decoration: none;
     font-weight: 500;
-    letter-spacing: 0.5px;
   }
-  .foot-links a:hover { color: var(--gold-dark); }
-  .foot-links a + a::before {
-    content: ' / ';
-    color: var(--border-strong);
-    margin: 0 6px;
-  }
-  .foot-credit {
+  footer a:hover { color: var(--gold); }
+  footer small {
     font-size: 11px;
-    color: var(--text-dim);
-    text-align: right;
+    color: var(--text-light);
   }
 
-  @media (max-width: 600px) {
-    .grid { grid-template-columns: 1fr; }
-    .k { min-width: 110px; font-size: 11px; }
-    .container { padding: 24px 16px; }
-    .foot { flex-direction: column; gap: 8px; text-align: center; }
-    .foot-credit { text-align: center; }
+  @media (max-width: 700px) {
+    body::before, body::after { width: 12px; }
+    .page { padding: 28px 18px 36px; }
+    .cols { grid-template-columns: 1fr; }
+    .r code:first-child { min-width: 90px; }
   }
 </style>
 </head>
 <body>
+<div class="page">
 
-<div class="yantra"></div>
+<header>
+  <h1>Claude Code<span>.</span></h1>
+  <div class="meta">Nihaan Mohammed &mdash; Product Manager, Tech for Good &middot; 25 Mar 2026</div>
+  <div class="quip">"Any sufficiently optimized workflow is indistinguishable from laziness." &mdash; Corollary to Clarke's Third Law</div>
+</header>
 
-<div class="container">
+<!-- ── SESSION ── -->
+<section>
+  <h2>Session</h2>
+  <p class="aside">Context is your Kardashev metric. Manage it or it manages you.</p>
+  <div class="r"><code>/clear</code><span>Between unrelated tasks. Clean reset > lossy compact.</span></div>
+  <div class="r"><code>/btw</code><span>Side questions without growing context. Zero cost.</span></div>
+  <div class="r"><code>/rename</code><span>Name sessions like branches. Resume later with <code>--resume</code>.</span></div>
+  <div class="r"><code>Esc Esc</code><span>Rewind to any checkpoint. Restore code, conversation, or both.</span></div>
+  <div class="r"><code>/effort</code><span><code>medium</code> for routine. <code>high</code> for deep work.</span></div>
+</section>
 
-  <div class="mark">
-    <span class="updated">25 Mar 2026</span>
-    <h1>Claude Code<span>.</span></h1>
-    <div class="byline">Nihaan Mohammed &mdash; Rationalist. Builder. Barely Patient.</div>
+<!-- ── AUTO MODE ── -->
+<section>
+  <h2>Auto Mode <small>— new, Mar 2026</small></h2>
+  <p class="aside">The classifier is your Bayesian bouncer. It updates on evidence, not vibes.</p>
+  <div class="callout">
+    <p><strong>The middle path.</strong> A classifier reviews each tool call — safe actions proceed, risky ones get blocked. You can start tasks and walk away. Less interruption than default, less risk than skip-permissions.</p>
   </div>
+  <div class="r"><code>Shift+Tab</code><span>Toggle between Default, Auto, and Bypass in any session.</span></div>
+  <div class="r"><code>--permission-mode auto</code><span>Start in auto mode from the CLI.</span></div>
+  <div class="n"><i>!</i><p><strong>Still use hooks.</strong> Auto mode's classifier is good, not omniscient. Your PreToolUse hooks run regardless of permission mode.</p></div>
+  <div class="n"><i>!</i><p><strong>Slight cost increase.</strong> Classifier adds tokens per tool call. Worth it for long tasks. Overkill for quick questions.</p></div>
+</section>
 
-  <!-- ── SESSION ── -->
-  <div class="section">
-    <div class="section-head"><span class="pip"></span><h2>Session</h2></div>
-    <div class="row"><span class="k">/clear</span><span class="v">Between unrelated tasks. Clean reset > lossy compact.</span></div>
-    <div class="row"><span class="k">/btw</span><span class="v">Side questions without growing context. Zero cost.</span></div>
-    <div class="row"><span class="k">/rename</span><span class="v">Name sessions like branches. Resume later with <span class="code">--resume</span>.</span></div>
-    <div class="row"><span class="k">Esc Esc</span><span class="v">Rewind to any checkpoint. Restore code, conversation, or both.</span></div>
-    <div class="row"><span class="k">/effort</span><span class="v"><span class="code">medium</span> for routine. <span class="code">high</span> for deep work. Toggle freely.</span></div>
-  </div>
+<!-- ── WORKFLOW ── -->
+<section>
+  <h2>Workflow</h2>
+  <p class="aside">Goodhart's Law applies to prompts. When you optimize for word count, you lose intent.</p>
+  <div class="n"><i>1</i><p><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run".</p></div>
+  <div class="n"><i>2</i><p><strong>Interview before building.</strong> "Interview me using AskUserQuestion. Dig into edge cases." Spec in a fresh session.</p></div>
+  <div class="n"><i>3</i><p><strong>Writer/Reviewer split.</strong> One session writes. A fresh one reviews. No self-bias.</p></div>
+  <div class="n"><i>4</i><p><strong>Give verification.</strong> Tests, screenshots, expected output. Single highest-leverage habit.</p></div>
+  <div class="n"><i>5</i><p><strong>Explore > Plan > Implement > Commit.</strong> Plan Mode for unknowns. Skip for trivial fixes.</p></div>
+  <div class="n"><i>6</i><p><strong>Two corrections max.</strong> Third fail = <code>/clear</code> and rewrite with what you learned.</p></div>
+</section>
 
-  <!-- ── WORKFLOW ── -->
-  <div class="section">
-    <div class="section-head"><span class="pip"></span><h2>Workflow</h2></div>
-    <div class="item"><span class="n">1</span><span class="t"><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run".</span></div>
-    <div class="item"><span class="n">2</span><span class="t"><strong>Interview before building.</strong> "Interview me using AskUserQuestion. Dig into edge cases." Spec in a fresh session after.</span></div>
-    <div class="item"><span class="n">3</span><span class="t"><strong>Writer/Reviewer split.</strong> One session writes. A fresh one reviews. No self-bias.</span></div>
-    <div class="item"><span class="n">4</span><span class="t"><strong>Give verification.</strong> Tests, screenshots, expected output. Single highest-leverage habit.</span></div>
-    <div class="item"><span class="n">5</span><span class="t"><strong>Explore > Plan > Implement > Commit.</strong> Plan Mode for unknowns. Skip for small fixes.</span></div>
-    <div class="item"><span class="n">6</span><span class="t"><strong>Two corrections max.</strong> Third fail = <span class="code">/clear</span>, rewrite the prompt with what you learned.</span></div>
-  </div>
-
-  <!-- ── TOKENS ── -->
-  <div class="section">
-    <div class="section-head"><span class="pip"></span><h2>Tokens</h2></div>
-    <div class="grid">
-      <div>
-        <div class="item"><span class="n">$</span><span class="t"><strong>Max 2 parallel agents.</strong> Each loads ~7K overhead. Bypass only with high budget.</span></div>
-        <div class="item"><span class="n">$</span><span class="t"><strong>CLI > MCP.</strong> <span class="code">gh</span> <span class="code">curl</span> <span class="code">jq</span> — no schema bloat.</span></div>
-        <div class="item"><span class="n">$</span><span class="t"><strong>Disable unused plugins.</strong> Each adds 300-500 tokens of tool schemas.</span></div>
-      </div>
-      <div>
-        <div class="item"><span class="n">$</span><span class="t"><strong>Subagents for research.</strong> Separate context, summary back. Main stays clean.</span></div>
-        <div class="item"><span class="n">$</span><span class="t"><strong>Scope narrowly.</strong> "Check src/auth/" not "investigate the codebase".</span></div>
-        <div class="item"><span class="n">$</span><span class="t"><strong>No redundant reads.</strong> Already read this session? Skip unless edited.</span></div>
-      </div>
+<!-- ── TOKENS ── -->
+<section>
+  <h2>Tokens</h2>
+  <p class="aside">Entropy isn't free. Every token you waste is a token that could've been thinking.</p>
+  <div class="cols">
+    <div>
+      <div class="n"><i>$</i><p><strong>Max 2 parallel agents.</strong> Each loads ~7K overhead.</p></div>
+      <div class="n"><i>$</i><p><strong>CLI > MCP.</strong> <code>gh</code> <code>curl</code> <code>jq</code> — no schema bloat.</p></div>
+      <div class="n"><i>$</i><p><strong>Disable unused plugins.</strong> 300-500 tokens each.</p></div>
+    </div>
+    <div>
+      <div class="n"><i>$</i><p><strong>Subagents for research.</strong> Separate context. Summary back.</p></div>
+      <div class="n"><i>$</i><p><strong>Scope narrowly.</strong> "Check src/auth/" not "investigate".</p></div>
+      <div class="n"><i>$</i><p><strong>No redundant reads.</strong> Already read? Skip unless edited.</p></div>
     </div>
   </div>
+</section>
 
-  <!-- ── SETUP ── -->
-  <div class="section">
-    <div class="section-head"><span class="pip"></span><h2>Setup</h2></div>
-    <div class="grid">
-      <div>
-        <div class="item"><span class="n">*</span><span class="t"><strong>CLAUDE.md: less is more.</strong> "Would removing this cause mistakes?" No? Cut it.</span></div>
-        <div class="item"><span class="n">*</span><span class="t"><strong>Hooks for musts.</strong> CLAUDE.md ~80% adherence. Hooks = 100%. Safety goes in hooks.</span></div>
-        <div class="item"><span class="n">*</span><span class="t"><strong>Memory cap: 15 files.</strong> Merge or delete before adding. MEMORY.md is an index only.</span></div>
-      </div>
-      <div>
-        <div class="item"><span class="n">*</span><span class="t"><strong>Skills are folders.</strong> Include scripts, data, assets. Claude discovers progressively.</span></div>
-        <div class="item"><span class="n">*</span><span class="t"><strong>Gotchas section = gold.</strong> Build from failure points. Update after every recurring mistake.</span></div>
-        <div class="item"><span class="n">*</span><span class="t"><strong>Push CLAUDE.md to git.</strong> It's shared context. Compounds over time across your team.</span></div>
-      </div>
+<!-- ── SETUP ── -->
+<section>
+  <h2>Setup</h2>
+  <p class="aside">Your config is your prior. A strong prior lets the model do less work and get better results.</p>
+  <div class="cols">
+    <div>
+      <div class="n"><i>*</i><p><strong>CLAUDE.md: less is more.</strong> "Would removing this cause mistakes?" No? Cut it.</p></div>
+      <div class="n"><i>*</i><p><strong>Hooks for musts.</strong> CLAUDE.md ~80%. Hooks = 100%.</p></div>
+      <div class="n"><i>*</i><p><strong>Memory cap: 15 files.</strong> Merge before adding. Index only.</p></div>
+    </div>
+    <div>
+      <div class="n"><i>*</i><p><strong>Skills are folders.</strong> Scripts, data, assets. Progressive disclosure.</p></div>
+      <div class="n"><i>*</i><p><strong>Gotchas = gold.</strong> Build from failures. Update after every mistake.</p></div>
+      <div class="n"><i>*</i><p><strong>Push CLAUDE.md to git.</strong> Shared context. Compounds over time.</p></div>
     </div>
   </div>
+</section>
 
-  <!-- ── DON'T ── -->
-  <div class="section">
-    <div class="section-head"><span class="pip"></span><h2>Don't</h2></div>
-    <div class="item"><span class="x">X</span><span class="t"><strong>Kitchen sink sessions.</strong> One task drifts into three. Context fills with noise. <span class="code">/clear</span> between.</span></div>
-    <div class="item"><span class="x">X</span><span class="t"><strong>Correction loops.</strong> 3+ corrections = polluted context. Rewrite the prompt, don't keep fixing.</span></div>
-    <div class="item"><span class="x">X</span><span class="t"><strong>Bloated CLAUDE.md.</strong> Over 5KB and rules get ignored. Prune. Move domain knowledge to skills.</span></div>
-    <div class="item"><span class="x">X</span><span class="t"><strong>Unscoped exploration.</strong> "Investigate everything" = hundreds of files read. Scope or use subagents.</span></div>
-    <div class="item"><span class="x">X</span><span class="t"><strong>Ship without verification.</strong> Plausible code misses edge cases. No tests = no confidence.</span></div>
-  </div>
+<!-- ── DON'T ── -->
+<section>
+  <h2>Don't</h2>
+  <p class="aside">Moloch wins every time you ignore these. Coordination failures start small.</p>
+  <div class="n"><i class="x">X</i><p><strong>Kitchen sink sessions.</strong> One task drifts into three. <code>/clear</code> between.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Correction loops.</strong> 3+ corrections = polluted context. Rewrite the prompt.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Bloated CLAUDE.md.</strong> Over 5KB and rules get lost. Move knowledge to skills.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Unscoped exploration.</strong> "Investigate everything" fills context. Scope or use subagents.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Ship without verification.</strong> Plausible != correct. No tests = no confidence.</p></div>
+</section>
 
-  <div class="foot">
-    <div class="foot-links">
-      <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Docs</a>
-      <a href="https://x.com/trq212" target="_blank">Thariq</a>
-      <a href="https://github.com/prody-dris/claude-code-cheatsheet" target="_blank">Source</a>
-    </div>
-    <div class="foot-credit">Nihaan Mohammed &middot; Living document</div>
+<footer>
+  <div>
+    <a href="https://code.claude.com/docs/en/best-practices">Docs</a> &middot;
+    <a href="https://claude.com/blog/auto-mode">Auto Mode</a> &middot;
+    <a href="https://x.com/trq212">Thariq</a> &middot;
+    <a href="https://github.com/prody-dris/claude-code-cheatsheet">Source</a>
   </div>
+  <small>Living document &middot; Nihaan Mohammed</small>
+</footer>
 
 </div>
-
 </body>
 </html>
