@@ -4,25 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Code — The Agent Playbook</title>
-<meta name="description" content="Living cheatsheet for Claude Code — session management, workflow habits, token efficiency, auto mode, and setup patterns. Updated daily.">
+<meta name="description" content="Living cheatsheet for Claude Code — session management, workflows, token efficiency, auto mode, setup. Updated daily by Nihaan Mohammed.">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
-    --bg: #F5F4F0;
-    --text: #2A2A2A;
-    --text-mid: #505050;
-    --text-light: #929288;
-    --gold: #A68A0C;
-    --gold-bg: rgba(166, 138, 12, 0.06);
-    --red-bg: rgba(150, 40, 40, 0.05);
-    --red: #964040;
-    --rule: rgba(0,0,0,0.05);
-    --code-bg: #222222;
-    --code-fg: #DFBF3C;
-    --carpet: #C0900E;
-    --carpet-dark: #4A3808;
-    --carpet-red: #8B3020;
+    --bg: #F6F5F1;
+    --text: #2C2C2C;
+    --text-mid: #525250;
+    --text-light: #96968E;
+    --gold: #A6880A;
+    --gold-bg: rgba(166, 136, 10, 0.055);
+    --red-bg: rgba(150, 40, 40, 0.045);
+    --red: #8C3838;
+    --rule: rgba(0,0,0,0.045);
+    --code-bg: #232323;
+    --code-fg: #DDB93A;
+    --carpet: #BF8E0D;
+    --carpet-dk: #4A3808;
+    --carpet-rd: #8B3020;
+    --new-bg: rgba(166, 136, 10, 0.1);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,168 +37,144 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── Dhurrie border ── */
   body::before, body::after {
     content: '';
     position: fixed;
     top: 0; bottom: 0;
-    width: 20px;
+    width: 16px;
     z-index: 10;
     background:
       repeating-linear-gradient(180deg,
         var(--carpet) 0px, var(--carpet) 2px,
-        transparent 2px, transparent 6px,
-        var(--carpet-dark) 6px, var(--carpet-dark) 8px,
-        transparent 8px, transparent 12px,
-        var(--carpet-red) 12px, var(--carpet-red) 14px,
-        transparent 14px, transparent 18px,
-        var(--carpet) 18px, var(--carpet) 20px,
-        transparent 20px, transparent 28px
+        transparent 2px, transparent 5px,
+        var(--carpet-dk) 5px, var(--carpet-dk) 7px,
+        transparent 7px, transparent 10px,
+        var(--carpet-rd) 10px, var(--carpet-rd) 12px,
+        transparent 12px, transparent 15px,
+        var(--carpet) 15px, var(--carpet) 17px,
+        transparent 17px, transparent 24px
       ),
       linear-gradient(90deg,
-        var(--carpet-dark) 0px, var(--carpet-dark) 2px,
-        rgba(192, 144, 14, 0.1) 2px, rgba(192, 144, 14, 0.1) 18px,
-        var(--carpet-dark) 18px, var(--carpet-dark) 20px
+        var(--carpet-dk) 0px, var(--carpet-dk) 2px,
+        rgba(191, 142, 13, 0.08) 2px, rgba(191, 142, 13, 0.08) 14px,
+        var(--carpet-dk) 14px, var(--carpet-dk) 16px
       );
   }
   body::before { left: 0; }
   body::after { right: 0; }
 
-  .page {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 44px 24px 48px;
-  }
+  .page { max-width: 620px; margin: 0 auto; padding: 40px 24px 44px; }
 
   /* ── Header ── */
-  header { margin-bottom: 36px; }
-  header h1 {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-  }
+  header { margin-bottom: 32px; }
+  header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
   header h1 span { color: var(--gold); }
-  header .sub {
-    font-size: 13px;
-    color: var(--text-light);
-    margin-top: 1px;
-  }
+  header .sub { font-size: 12.5px; color: var(--text-light); margin-top: 1px; }
   header .quip {
-    font-size: 11.5px;
+    font-size: 11.5px; color: var(--text-light);
+    font-style: italic; margin-top: 8px; opacity: 0.6;
+  }
+
+  /* ── Timestamp ── */
+  .timestamp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
     color: var(--text-light);
-    font-style: italic;
-    margin-top: 8px;
-    opacity: 0.65;
+    background: var(--gold-bg);
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
   }
 
   /* ── Section ── */
-  section { margin-bottom: 28px; }
+  section { margin-bottom: 26px; }
   section h2 {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    color: var(--gold);
-    margin-bottom: 10px;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2.5px;
+    color: var(--gold); margin-bottom: 8px;
   }
   section h2 small {
-    font-weight: 400;
-    text-transform: none;
-    letter-spacing: 0;
-    color: var(--text-light);
+    font-weight: 400; text-transform: none;
+    letter-spacing: 0; color: var(--text-light);
+  }
+  section h2 .badge {
+    font-size: 9px; font-weight: 600;
+    background: var(--new-bg); color: var(--gold);
+    padding: 1px 6px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-left: 6px; vertical-align: middle;
   }
 
   /* ── Rows ── */
   .r {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    padding: 7px 0;
+    display: flex; align-items: baseline;
+    gap: 14px; padding: 6px 0;
     border-bottom: 1px solid var(--rule);
   }
   .r:last-child { border-bottom: none; }
-
   code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    background: var(--code-bg);
-    color: var(--code-fg);
-    padding: 2px 7px;
-    border-radius: 3px;
-    white-space: nowrap;
+    font-size: 11.5px; font-weight: 500;
+    background: var(--code-bg); color: var(--code-fg);
+    padding: 2px 7px; border-radius: 3px; white-space: nowrap;
   }
-  .r code:first-child {
-    min-width: 115px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-  .r span { color: var(--text-mid); font-size: 14px; }
+  .r code:first-child { min-width: 110px; text-align: center; flex-shrink: 0; }
+  .r span { color: var(--text-mid); font-size: 13.5px; }
 
   /* ── List items ── */
   .n {
-    display: flex;
-    gap: 10px;
-    padding: 7px 0;
+    display: flex; gap: 10px;
+    padding: 6px 0;
     border-bottom: 1px solid var(--rule);
   }
   .n:last-child { border-bottom: none; }
   .n i {
     font-style: normal;
     font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    font-size: 11px;
-    min-width: 20px; height: 20px;
+    font-weight: 600; font-size: 10px;
+    min-width: 18px; height: 18px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 3px;
-    flex-shrink: 0;
-    margin-top: 3px;
-    background: var(--gold-bg);
-    color: var(--gold);
+    border-radius: 3px; flex-shrink: 0; margin-top: 4px;
+    background: var(--gold-bg); color: var(--gold);
   }
   .n i.x { background: var(--red-bg); color: var(--red); }
-  .n p { color: var(--text-mid); font-size: 14px; line-height: 1.6; }
+  .n p { color: var(--text-mid); font-size: 13.5px; line-height: 1.6; }
   .n p strong { color: var(--text); font-weight: 600; }
 
   /* ── Cols ── */
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
 
   /* ── Callout ── */
   .callout {
     background: var(--gold-bg);
     border-left: 3px solid var(--gold);
-    padding: 11px 15px;
-    border-radius: 0 5px 5px 0;
-    margin-bottom: 8px;
+    padding: 10px 14px; border-radius: 0 4px 4px 0;
+    margin-bottom: 6px;
   }
-  .callout p { font-size: 13.5px; color: var(--text-mid); line-height: 1.6; }
+  .callout p { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
   .callout strong { color: var(--text); }
 
   /* ── Footer ── */
   footer {
-    margin-top: 32px;
-    padding-top: 14px;
+    margin-top: 28px; padding-top: 12px;
     border-top: 1px solid var(--rule);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 6px;
+    display: flex; justify-content: space-between;
+    align-items: baseline; flex-wrap: wrap; gap: 6px;
   }
   footer a {
-    font-size: 11.5px;
-    color: var(--text-light);
-    text-decoration: none;
-    font-weight: 500;
+    font-size: 11px; color: var(--text-light);
+    text-decoration: none; font-weight: 500;
   }
   footer a:hover { color: var(--gold); }
-  footer small { font-size: 11px; color: var(--text-light); }
+  footer small { font-size: 10.5px; color: var(--text-light); }
 
-  @media (max-width: 700px) {
-    body::before, body::after { width: 10px; }
-    .page { padding: 28px 16px 36px; }
+  @media (max-width: 660px) {
+    body::before, body::after { width: 8px; }
+    .page { padding: 24px 14px 32px; }
     .cols { grid-template-columns: 1fr; }
-    .r code:first-child { min-width: 90px; }
+    .r code:first-child { min-width: 85px; }
   }
 </style>
 </head>
@@ -206,9 +183,19 @@
 
 <header>
   <h1>Claude Code<span>.</span></h1>
-  <div class="sub">The Agent Playbook &mdash; Nihaan Mohammed &middot; Product Manager, Tech for Good &middot; 25 Mar 2026</div>
-  <div class="quip">"Any sufficiently optimized workflow is indistinguishable from laziness."</div>
+  <div class="sub">The Agent Playbook &mdash; Nihaan Mohammed &middot; Product Manager, Tech for Good</div>
+  <div class="quip">"Any sufficiently optimized workflow is indistinguishable from laziness." &mdash; Corollary to Clarke's Third</div>
 </header>
+
+<div class="timestamp">Last updated: 25 Mar 2026, 11:55 PM IST</div>
+
+<!-- ══ WHAT'S NEW ══ -->
+<section>
+  <h2>What's New <span class="badge">Latest</span></h2>
+  <div class="callout">
+    <p><strong>Auto Mode</strong> (24 Mar 2026) &mdash; A classifier reviews each tool call before it runs. Safe actions proceed automatically, risky ones get blocked. The middle path between clicking "approve" 50 times and yolo-ing with skip-permissions. Enable via <code>Shift+Tab</code> or <code>--permission-mode auto</code>. Your safety hooks still run on top.</p>
+  </div>
+</section>
 
 <!-- ── SESSION ── -->
 <section>
@@ -220,34 +207,24 @@
   <div class="r"><code>/effort</code><span><code>medium</code> for routine. <code>high</code> for deep work.</span></div>
 </section>
 
-<!-- ── AUTO MODE ── -->
-<section>
-  <h2>Auto Mode <small>— new, 24 Mar 2026</small></h2>
-  <div class="callout">
-    <p><strong>The middle path between default and bypass.</strong> A classifier reviews each tool call — safe actions proceed automatically, risky ones get blocked. Start tasks and walk away. Enable via <code>Shift+Tab</code> or <code>--permission-mode auto</code>.</p>
-  </div>
-  <div class="n"><i>!</i><p><strong>Still use hooks.</strong> The classifier is good, not omniscient. Your PreToolUse safety hooks run regardless of permission mode.</p></div>
-  <div class="n"><i>!</i><p><strong>Slight cost tradeoff.</strong> Classifier adds tokens per tool call. Worth it for long autonomous tasks. Skip for quick questions.</p></div>
-</section>
-
 <!-- ── WORKFLOW ── -->
 <section>
   <h2>Workflow</h2>
   <div class="n"><i>1</i><p><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run".</p></div>
-  <div class="n"><i>2</i><p><strong>Interview before building.</strong> "Interview me about this feature. Dig into edge cases." Then spec in a fresh session.</p></div>
+  <div class="n"><i>2</i><p><strong>Interview before building.</strong> Have Claude ask you the hard questions first. Then spec in a fresh session.</p></div>
   <div class="n"><i>3</i><p><strong>Writer/Reviewer split.</strong> One session writes. A fresh one reviews. No self-bias.</p></div>
-  <div class="n"><i>4</i><p><strong>Give verification.</strong> Tests, screenshots, expected output. Single highest-leverage habit.</p></div>
+  <div class="n"><i>4</i><p><strong>Give verification.</strong> Tests, screenshots, expected output. Highest-leverage habit you can build.</p></div>
   <div class="n"><i>5</i><p><strong>Explore > Plan > Implement > Commit.</strong> Plan Mode for unknowns. Skip for trivial fixes.</p></div>
-  <div class="n"><i>6</i><p><strong>Two corrections max.</strong> Third fail = <code>/clear</code> and rewrite with what you learned.</p></div>
+  <div class="n"><i>6</i><p><strong>Two corrections max.</strong> Third fail = <code>/clear</code> and rewrite. Don't Goodhart your prompts &mdash; optimize for clarity, not length.</p></div>
 </section>
 
 <!-- ── TOKENS ── -->
 <section>
-  <h2>Tokens</h2>
+  <h2>Tokens <small>&mdash; every wasted token is a thought that never happened</small></h2>
   <div class="cols">
     <div>
       <div class="n"><i>$</i><p><strong>Max 2 parallel agents.</strong> Each loads ~7K overhead.</p></div>
-      <div class="n"><i>$</i><p><strong>CLI > MCP.</strong> <code>gh</code> <code>curl</code> <code>jq</code> — no schema bloat.</p></div>
+      <div class="n"><i>$</i><p><strong>CLI > MCP.</strong> <code>gh</code> <code>curl</code> <code>jq</code> &mdash; no schema bloat.</p></div>
       <div class="n"><i>$</i><p><strong>Disable unused plugins.</strong> 300-500 tokens each.</p></div>
     </div>
     <div>
@@ -260,7 +237,7 @@
 
 <!-- ── SETUP ── -->
 <section>
-  <h2>Setup</h2>
+  <h2>Setup <small>&mdash; your config is your prior</small></h2>
   <div class="cols">
     <div>
       <div class="n"><i>*</i><p><strong>CLAUDE.md: less is more.</strong> Would removing this cause mistakes? No? Cut it.</p></div>
@@ -275,24 +252,22 @@
   </div>
 </section>
 
-<!-- ── DON'T ── -->
+<!-- ── AVOID ── -->
 <section>
-  <h2>Avoid</h2>
+  <h2>Avoid <small>&mdash; coordination failures start small</small></h2>
   <div class="n"><i class="x">X</i><p><strong>Kitchen sink sessions.</strong> One task drifts into three. <code>/clear</code> between.</p></div>
-  <div class="n"><i class="x">X</i><p><strong>Correction loops.</strong> 3+ corrections = polluted context. Rewrite the prompt instead.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Correction loops.</strong> 3+ corrections = polluted context. Rewrite the prompt.</p></div>
   <div class="n"><i class="x">X</i><p><strong>Bloated CLAUDE.md.</strong> Over 5KB and rules get lost. Move knowledge to skills.</p></div>
-  <div class="n"><i class="x">X</i><p><strong>Unscoped exploration.</strong> "Investigate everything" fills context. Scope or use subagents.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Unscoped exploration.</strong> "Investigate everything" fills context. Scope or subagents.</p></div>
   <div class="n"><i class="x">X</i><p><strong>Ship without verification.</strong> Plausible != correct. No tests, no confidence.</p></div>
 </section>
 
 <footer>
   <div>
-    <a href="https://code.claude.com/docs/en/best-practices">Docs</a> &middot;
-    <a href="https://claude.com/blog/auto-mode">Auto Mode</a> &middot;
-    <a href="https://x.com/trq212">Thariq @ Anthropic</a> &middot;
-    <a href="https://github.com/prody-dris/claude-code-cheatsheet">Source</a>
+    <a href="https://code.claude.com/docs/en/best-practices">Official Docs</a> &middot;
+    <a href="https://github.com/prody-dris/claude-code-cheatsheet">Source &amp; Contribute</a>
   </div>
-  <small>Updated daily &middot; Nihaan Mohammed</small>
+  <small>Living document &middot; Built by Nihaan Mohammed with Claude Code</small>
 </footer>
 
 </div>
