@@ -3,574 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude Code Cheatsheet</title>
-<meta name="description" content="Living cheatsheet for Claude Code — best practices, setup tips, and workflow habits from real daily use.">
+<title>Claude Code Cheatsheet — Nihaan</title>
+<meta name="description" content="Compact Claude Code cheatsheet — best practices, setup patterns, and workflow habits. By Nihaan Mohammed.">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
-    --bg: #0a0a1a;
-    --surface: rgba(255, 255, 255, 0.04);
-    --surface-hover: rgba(255, 255, 255, 0.07);
-    --border: rgba(255, 255, 255, 0.08);
-    --text: #e8e8f0;
-    --text-dim: #8888a8;
-    --accent-purple: #c084fc;
-    --accent-blue: #60a5fa;
-    --accent-amber: #fbbf24;
-    --accent-green: #4ade80;
-    --accent-pink: #f472b6;
-    --accent-red: #f87171;
-    --glow-purple: rgba(192, 132, 252, 0.15);
-    --glow-blue: rgba(96, 165, 250, 0.15);
+    --bg: #FAF9F6;
+    --surface: #FFFFFF;
+    --border: #E8E4DC;
+    --border-strong: #D4CFC5;
+    --text: #1A1A1A;
+    --text-mid: #4A4A4A;
+    --text-dim: #7A7A72;
+    --gold: #C8A415;
+    --gold-light: #F5EFD5;
+    --gold-dark: #9A7D0A;
+    --black: #111111;
+    --pixel: #2D2D2D;
+    --code-bg: #1A1A1A;
+    --code-text: #E5C54B;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     background: var(--bg);
     color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
+    font-size: 13.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
 
-  body::before, body::after {
-    content: '';
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.4;
-    z-index: 0;
-    animation: float 20s ease-in-out infinite;
-  }
-  body::before {
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, var(--glow-purple), transparent 70%);
-    top: -200px; left: -100px;
-  }
-  body::after {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, var(--glow-blue), transparent 70%);
-    bottom: -150px; right: -100px;
-    animation-delay: -10s;
-  }
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -40px) scale(1.05); }
-    66% { transform: translate(-20px, 20px) scale(0.95); }
+  /* Subtle Yantra-inspired geometric header accent */
+  .yantra {
+    width: 100%;
+    height: 4px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--gold) 0px, var(--gold) 8px,
+      transparent 8px, transparent 12px,
+      var(--black) 12px, var(--black) 14px,
+      transparent 14px, transparent 18px
+    );
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
   .container {
-    max-width: 920px;
+    max-width: 740px;
     margin: 0 auto;
-    padding: 40px 24px 60px;
-    position: relative;
-    z-index: 1;
+    padding: 36px 24px 48px;
   }
 
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
+  /* Header / Mark */
+  .mark {
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--black);
   }
-  .header h1 {
-    font-size: 28px;
+  .mark h1 {
+    font-size: 22px;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 8px;
+    color: var(--black);
     letter-spacing: -0.5px;
+    margin-bottom: 2px;
   }
-  .header .subtitle {
-    color: var(--text-dim);
-    font-size: 14px;
-    max-width: 500px;
-    margin: 0 auto;
-    line-height: 1.6;
+  .mark h1 span {
+    color: var(--gold);
   }
-  .header .updated {
-    color: var(--text-dim);
+  .mark .byline {
     font-size: 12px;
-    margin-top: 8px;
-    opacity: 0.5;
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    transition: all 0.3s ease;
-  }
-  .card:hover {
-    background: var(--surface-hover);
-    border-color: rgba(255, 255, 255, 0.12);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  }
-
-  .card-title {
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
+    color: var(--text-dim);
     letter-spacing: 1.5px;
-    margin-bottom: 16px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .mark .updated {
+    float: right;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section-head {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
   }
-  .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
+  .section-head h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-mid);
+  }
+  .section-head .pip {
+    width: 6px; height: 6px;
+    background: var(--gold);
     display: inline-block;
   }
-  .purple .dot { background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
-  .blue .dot { background: var(--accent-blue); box-shadow: 0 0 12px var(--accent-blue); }
-  .amber .dot { background: var(--accent-amber); box-shadow: 0 0 12px var(--accent-amber); }
-  .green .dot { background: var(--accent-green); box-shadow: 0 0 12px var(--accent-green); }
-  .pink .dot { background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
-  .red .dot { background: var(--accent-red); box-shadow: 0 0 12px var(--accent-red); }
-  .purple { color: var(--accent-purple); }
-  .blue { color: var(--accent-blue); }
-  .amber { color: var(--accent-amber); }
-  .green { color: var(--accent-green); }
-  .pink { color: var(--accent-pink); }
-  .red { color: var(--accent-red); }
 
-  .cmd-row {
+  /* Command rows */
+  .row {
     display: flex;
     align-items: baseline;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    transition: all 0.2s ease;
+    padding: 6px 0;
   }
-  .cmd-row:last-child { border-bottom: none; }
-  .cmd-row:hover { padding-left: 8px; }
-
-  .cmd {
+  .row + .row {
+    border-top: 1px solid var(--border);
+  }
+  .k {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
-    color: var(--accent-amber);
-    min-width: 180px;
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 2px 8px;
+    border-radius: 3px;
+    min-width: 150px;
     flex-shrink: 0;
+    text-align: center;
   }
-  .desc {
-    color: var(--text-dim);
+  .v {
+    color: var(--text-mid);
     font-size: 13px;
-    line-height: 1.6;
+    padding-left: 14px;
   }
 
-  .habit {
+  /* Numbered items */
+  .item {
     display: flex;
-    gap: 14px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    transition: all 0.2s ease;
+    gap: 10px;
+    padding: 7px 0;
   }
-  .habit:last-child { border-bottom: none; }
-  .habit:hover { padding-left: 8px; }
-
-  .habit-num {
+  .item + .item {
+    border-top: 1px solid var(--border);
+  }
+  .n {
     font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    font-size: 14px;
-    min-width: 24px;
-    height: 24px;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--gold-dark);
+    background: var(--gold-light);
+    min-width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 3px;
     flex-shrink: 0;
+    margin-top: 1px;
   }
-  .purple .habit-num { color: var(--accent-purple); background: rgba(192, 132, 252, 0.1); }
-  .blue .habit-num { color: var(--accent-blue); background: rgba(96, 165, 250, 0.1); }
-  .green .habit-num { color: var(--accent-green); background: rgba(74, 222, 128, 0.1); }
-  .pink .habit-num { color: var(--accent-pink); background: rgba(244, 114, 182, 0.1); }
-  .amber .habit-num { color: var(--accent-amber); background: rgba(251, 191, 36, 0.1); }
-  .red .habit-num { color: var(--accent-red); background: rgba(248, 113, 113, 0.1); }
-
-  .habit-text {
+  .t {
+    color: var(--text-mid);
     font-size: 13px;
-    color: var(--text-dim);
-    line-height: 1.6;
   }
-  .habit-text strong {
+  .t strong {
     color: var(--text);
     font-weight: 600;
   }
-
-  .tag {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 100px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    vertical-align: middle;
-    margin-left: 4px;
+  .code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 1px 6px;
+    border-radius: 3px;
   }
-  .tag.green { background: rgba(74, 222, 128, 0.15); color: var(--accent-green); }
-  .tag.purple { background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); }
-  .tag.blue { background: rgba(96, 165, 250, 0.15); color: var(--accent-blue); }
-  .tag.amber { background: rgba(251, 191, 36, 0.15); color: var(--accent-amber); }
 
-  .highlight { color: var(--accent-amber); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-
+  /* Two-column grid */
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 24px;
   }
 
-  .section-label {
+  /* Anti-pattern marker */
+  .x {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
     font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    color: #B91C1C;
+    background: #FEE2E2;
+    min-width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Footer */
+  .foot {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 2px solid var(--black);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .foot-links a {
+    font-size: 12px;
     color: var(--text-dim);
-    opacity: 0.4;
-    margin: 32px 0 12px 4px;
-  }
-
-  @media (max-width: 700px) {
-    .grid { grid-template-columns: 1fr; }
-    .cmd { min-width: 120px; }
-    .container { padding: 24px 16px; }
-    .header h1 { font-size: 22px; }
-  }
-
-  .footer {
-    text-align: center;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-  }
-  .footer a {
-    color: var(--accent-purple);
     text-decoration: none;
-    font-size: 13px;
-    transition: color 0.2s;
+    font-weight: 500;
+    letter-spacing: 0.5px;
   }
-  .footer a:hover { color: var(--accent-blue); }
-  .footer .credit {
-    color: var(--text-dim);
+  .foot-links a:hover { color: var(--gold-dark); }
+  .foot-links a + a::before {
+    content: ' / ';
+    color: var(--border-strong);
+    margin: 0 6px;
+  }
+  .foot-credit {
     font-size: 11px;
-    margin-top: 8px;
-    opacity: 0.5;
-    line-height: 1.6;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
+    .k { min-width: 110px; font-size: 11px; }
+    .container { padding: 24px 16px; }
+    .foot { flex-direction: column; gap: 8px; text-align: center; }
+    .foot-credit { text-align: center; }
   }
 </style>
 </head>
 <body>
 
+<div class="yantra"></div>
+
 <div class="container">
 
-  <div class="header">
-    <h1>Claude Code Cheatsheet</h1>
-    <div class="subtitle">Best practices, setup patterns, and workflow habits for Claude Code — from real daily use as a non-technical PM running multiple products.</div>
-    <div class="updated">Last updated: 25 March 2026</div>
+  <div class="mark">
+    <span class="updated">25 Mar 2026</span>
+    <h1>Claude Code<span>.</span></h1>
+    <div class="byline">Nihaan Mohammed &mdash; Rationalist. Builder. Barely Patient.</div>
   </div>
 
-  <!-- ═══════════════════════════════════════ -->
-  <div class="section-label">Foundations</div>
-  <!-- ═══════════════════════════════════════ -->
-
-  <!-- Session Hygiene -->
-  <div class="card">
-    <div class="card-title purple"><span class="dot"></span> Session Hygiene</div>
-    <div class="cmd-row">
-      <span class="cmd">/clear</span>
-      <span class="desc">Between unrelated tasks. Clean reset beats lossy compact. Always.</span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">/btw</span>
-      <span class="desc">Quick side questions. Never enters context history. Zero token cost.</span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">/rename</span>
-      <span class="desc">Name sessions like branches: <span class="highlight">srh-uat-fixes</span>, <span class="highlight">oauth-spec</span></span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">claude --resume</span>
-      <span class="desc">Pick up named sessions. <span class="highlight">--continue</span> for the most recent one.</span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">/compact &lt;focus&gt;</span>
-      <span class="desc">Only when staying on the same task but context is getting heavy.</span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">Esc + Esc</span>
-      <span class="desc">Rewind to any checkpoint. Restore code, conversation, or both.</span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">/effort medium</span>
-      <span class="desc">For routine work. <span class="highlight">/effort high</span> for deep sessions. Toggle to save thinking tokens.</span>
-    </div>
+  <!-- ── SESSION ── -->
+  <div class="section">
+    <div class="section-head"><span class="pip"></span><h2>Session</h2></div>
+    <div class="row"><span class="k">/clear</span><span class="v">Between unrelated tasks. Clean reset > lossy compact.</span></div>
+    <div class="row"><span class="k">/btw</span><span class="v">Side questions without growing context. Zero cost.</span></div>
+    <div class="row"><span class="k">/rename</span><span class="v">Name sessions like branches. Resume later with <span class="code">--resume</span>.</span></div>
+    <div class="row"><span class="k">Esc Esc</span><span class="v">Rewind to any checkpoint. Restore code, conversation, or both.</span></div>
+    <div class="row"><span class="k">/effort</span><span class="v"><span class="code">medium</span> for routine. <span class="code">high</span> for deep work. Toggle freely.</span></div>
   </div>
 
-  <!-- Workflow Habits -->
-  <div class="card">
-    <div class="card-title blue"><span class="dot"></span> Workflow Habits</div>
-    <div class="habit">
-      <span class="habit-num">1</span>
-      <span class="habit-text"><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run" — lets Claude calibrate effort and tools.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">2</span>
-      <span class="habit-text"><strong>Interview pattern for big features.</strong> "Interview me about this feature using AskUserQuestion. Dig into edge cases and tradeoffs." Then write the spec in a fresh session.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">3</span>
-      <span class="habit-text"><strong>Writer/Reviewer split.</strong> One session writes code. A fresh session reviews it. Fresh context = no self-bias.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">4</span>
-      <span class="habit-text"><strong>Give verification criteria.</strong> Tests, screenshots, expected output. The single highest-leverage thing you can do. <span class="tag green">2-3x quality</span></span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">5</span>
-      <span class="habit-text"><strong>Explore &gt; Plan &gt; Implement &gt; Commit.</strong> Use Plan Mode (Shift+Tab) for unknowns. Skip the ceremony for small fixes.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">6</span>
-      <span class="habit-text"><strong>Two corrections max.</strong> If Claude fails twice on the same thing, <span class="highlight">/clear</span> and rewrite the prompt with what you learned.</span>
+  <!-- ── WORKFLOW ── -->
+  <div class="section">
+    <div class="section-head"><span class="pip"></span><h2>Workflow</h2></div>
+    <div class="item"><span class="n">1</span><span class="t"><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run".</span></div>
+    <div class="item"><span class="n">2</span><span class="t"><strong>Interview before building.</strong> "Interview me using AskUserQuestion. Dig into edge cases." Spec in a fresh session after.</span></div>
+    <div class="item"><span class="n">3</span><span class="t"><strong>Writer/Reviewer split.</strong> One session writes. A fresh one reviews. No self-bias.</span></div>
+    <div class="item"><span class="n">4</span><span class="t"><strong>Give verification.</strong> Tests, screenshots, expected output. Single highest-leverage habit.</span></div>
+    <div class="item"><span class="n">5</span><span class="t"><strong>Explore > Plan > Implement > Commit.</strong> Plan Mode for unknowns. Skip for small fixes.</span></div>
+    <div class="item"><span class="n">6</span><span class="t"><strong>Two corrections max.</strong> Third fail = <span class="code">/clear</span>, rewrite the prompt with what you learned.</span></div>
+  </div>
+
+  <!-- ── TOKENS ── -->
+  <div class="section">
+    <div class="section-head"><span class="pip"></span><h2>Tokens</h2></div>
+    <div class="grid">
+      <div>
+        <div class="item"><span class="n">$</span><span class="t"><strong>Max 2 parallel agents.</strong> Each loads ~7K overhead. Bypass only with high budget.</span></div>
+        <div class="item"><span class="n">$</span><span class="t"><strong>CLI > MCP.</strong> <span class="code">gh</span> <span class="code">curl</span> <span class="code">jq</span> — no schema bloat.</span></div>
+        <div class="item"><span class="n">$</span><span class="t"><strong>Disable unused plugins.</strong> Each adds 300-500 tokens of tool schemas.</span></div>
+      </div>
+      <div>
+        <div class="item"><span class="n">$</span><span class="t"><strong>Subagents for research.</strong> Separate context, summary back. Main stays clean.</span></div>
+        <div class="item"><span class="n">$</span><span class="t"><strong>Scope narrowly.</strong> "Check src/auth/" not "investigate the codebase".</span></div>
+        <div class="item"><span class="n">$</span><span class="t"><strong>No redundant reads.</strong> Already read this session? Skip unless edited.</span></div>
+      </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════ -->
-  <div class="section-label">Token Efficiency</div>
-  <!-- ═══════════════════════════════════════ -->
-
-  <div class="grid">
-
-    <div class="card">
-      <div class="card-title amber"><span class="dot"></span> Spend Less</div>
-      <div class="habit">
-        <span class="habit-text"><strong>Max 2 parallel agents.</strong> Each loads ~7K tokens of system prompt overhead. Bypass only when token budget is high before reset.</span>
+  <!-- ── SETUP ── -->
+  <div class="section">
+    <div class="section-head"><span class="pip"></span><h2>Setup</h2></div>
+    <div class="grid">
+      <div>
+        <div class="item"><span class="n">*</span><span class="t"><strong>CLAUDE.md: less is more.</strong> "Would removing this cause mistakes?" No? Cut it.</span></div>
+        <div class="item"><span class="n">*</span><span class="t"><strong>Hooks for musts.</strong> CLAUDE.md ~80% adherence. Hooks = 100%. Safety goes in hooks.</span></div>
+        <div class="item"><span class="n">*</span><span class="t"><strong>Memory cap: 15 files.</strong> Merge or delete before adding. MEMORY.md is an index only.</span></div>
       </div>
-      <div class="habit">
-        <span class="habit-text"><strong>CLI &gt; MCP.</strong> <span class="highlight">gh</span>, <span class="highlight">curl</span>, <span class="highlight">jq</span> have no schema overhead. MCP tools load definitions into every context.</span>
+      <div>
+        <div class="item"><span class="n">*</span><span class="t"><strong>Skills are folders.</strong> Include scripts, data, assets. Claude discovers progressively.</span></div>
+        <div class="item"><span class="n">*</span><span class="t"><strong>Gotchas section = gold.</strong> Build from failure points. Update after every recurring mistake.</span></div>
+        <div class="item"><span class="n">*</span><span class="t"><strong>Push CLAUDE.md to git.</strong> It's shared context. Compounds over time across your team.</span></div>
       </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Disable unused plugins.</strong> Playwright, Linear, skill-creator — disable when not needed. Each adds ~300-500 tokens of tool schemas.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Targeted Playwright snapshots.</strong> DOM snapshots are 2-4K tokens each. Use targeted selectors, not full-page, unless debugging layout.</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title amber"><span class="dot"></span> Spend Smart</div>
-      <div class="habit">
-        <span class="habit-text"><strong>Subagents for research.</strong> They explore in separate context, report back summaries only. Main conversation stays clean.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Scope investigations.</strong> "Check src/auth/" not "investigate the codebase". Narrow = fewer tokens consumed.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>No redundant file reads.</strong> If Claude read a file this session, it doesn't need to read it again unless it was edited.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Never re-dispatch failed agents.</strong> If agents hit rate limits or errors, start a fresh session instead of retrying.</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ═══════════════════════════════════════ -->
-  <div class="section-label">Setup That Pays Off</div>
-  <!-- ═══════════════════════════════════════ -->
-
-  <!-- CLAUDE.md -->
-  <div class="card">
-    <div class="card-title green"><span class="dot"></span> CLAUDE.md — Your Persistent Brain</div>
-    <div class="habit">
-      <span class="habit-num">1</span>
-      <span class="habit-text"><strong>For each line ask:</strong> "Would removing this cause Claude to make mistakes?" If not, cut it. Bloated files cause Claude to ignore your actual instructions.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">2</span>
-      <span class="habit-text"><strong>Hooks for musts, CLAUDE.md for shoulds.</strong> Hooks are deterministic (100% enforcement). CLAUDE.md is advisory (~80%). Put safety rules in hooks.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">3</span>
-      <span class="habit-text"><strong>Don't document what Claude can infer.</strong> It reads your code. Only add what it can't figure out alone — build commands, conventions, gotchas.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">4</span>
-      <span class="habit-text"><strong>If Claude keeps ignoring a rule,</strong> the file is too long and the rule is getting lost. Prune first, add emphasis second.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">5</span>
-      <span class="habit-text"><strong>Check it into git.</strong> CLAUDE.md compounds over time. Your team benefits from shared context. Push updates after every session.</span>
     </div>
   </div>
 
-  <div class="grid">
-
-    <!-- Hooks -->
-    <div class="card">
-      <div class="card-title red"><span class="dot"></span> Hooks — Your Safety Net</div>
-      <div class="habit">
-        <span class="habit-text"><strong>PreToolUse: credential-guard.py</strong> — Blocks writing tokens/keys to non-allowed files. Matches Bash, Write, Edit.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>PreToolUse: pre-tool-use.sh</strong> — Blocks sudo, rm -rf, force push, push to main, git reset --hard, DROP, bench destroy.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>PreToolUse: agent-safety-gate.py</strong> — Auto-injects safety rules into every subagent dispatch.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>PostToolUse: audit logger</strong> — Logs every file write and bash command to daily log. 30-day rotation.</span>
-      </div>
-    </div>
-
-    <!-- Memory -->
-    <div class="card">
-      <div class="card-title green"><span class="dot"></span> Memory — Stay Lean</div>
-      <div class="habit">
-        <span class="habit-text"><strong>Cap at 15 files per scope.</strong> Merge or delete before adding new ones. Memory bloat = wasted tokens every session.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>MEMORY.md is an index, not content.</strong> One line per file. Under 20 lines. It loads every conversation.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Never store credentials in memory.</strong> Use project CLAUDE.md or .env files (chmod 600). Memory files reference WHERE, never WHAT.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Delete stale memories.</strong> If it references something that no longer exists, kill it. No nostalgia.</span>
-      </div>
-    </div>
-
+  <!-- ── DON'T ── -->
+  <div class="section">
+    <div class="section-head"><span class="pip"></span><h2>Don't</h2></div>
+    <div class="item"><span class="x">X</span><span class="t"><strong>Kitchen sink sessions.</strong> One task drifts into three. Context fills with noise. <span class="code">/clear</span> between.</span></div>
+    <div class="item"><span class="x">X</span><span class="t"><strong>Correction loops.</strong> 3+ corrections = polluted context. Rewrite the prompt, don't keep fixing.</span></div>
+    <div class="item"><span class="x">X</span><span class="t"><strong>Bloated CLAUDE.md.</strong> Over 5KB and rules get ignored. Prune. Move domain knowledge to skills.</span></div>
+    <div class="item"><span class="x">X</span><span class="t"><strong>Unscoped exploration.</strong> "Investigate everything" = hundreds of files read. Scope or use subagents.</span></div>
+    <div class="item"><span class="x">X</span><span class="t"><strong>Ship without verification.</strong> Plausible code misses edge cases. No tests = no confidence.</span></div>
   </div>
 
-  <!-- Folder Structure -->
-  <div class="card">
-    <div class="card-title purple"><span class="dot"></span> Folder Structure — Separation of Concerns</div>
-    <div class="cmd-row">
-      <span class="cmd">~/Workspaces/</span>
-      <span class="desc">Code repos, tools, configs — Claude's working projects. Each has its own CLAUDE.md.</span>
+  <div class="foot">
+    <div class="foot-links">
+      <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Docs</a>
+      <a href="https://x.com/trq212" target="_blank">Thariq</a>
+      <a href="https://github.com/prody-dris/claude-code-cheatsheet" target="_blank">Source</a>
     </div>
-    <div class="cmd-row">
-      <span class="cmd">~/Documents/Projects/</span>
-      <span class="desc">Your working documents — specs, legal, references. Human-authored, not code.</span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">~/.claude/agents/</span>
-      <span class="desc">Custom subagents. Use <span class="highlight">skill-selector</span> when unsure which to route to.</span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">~/.claude/hooks/</span>
-      <span class="desc">Safety hooks — credential guard, destructive command blocker, agent safety gate, audit logger.</span>
-    </div>
-    <div class="cmd-row">
-      <span class="cmd">~/.claude/projects/*/memory/</span>
-      <span class="desc">Scoped memory files. Each project scope gets its own set. Cap at 15.</span>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════ -->
-  <div class="section-label">Daily Rituals</div>
-  <!-- ═══════════════════════════════════════ -->
-
-  <div class="card">
-    <div class="card-title pink"><span class="dot"></span> CC Morning &amp; Evening</div>
-    <div class="habit">
-      <span class="habit-num">AM</span>
-      <span class="habit-text"><strong>CC Morning — daily plan generator.</strong> Pulls NeoSapien conversations, calendar, reminders, and pending items. Generates a prioritized daily plan with time blocks. Start every workday here.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">PM</span>
-      <span class="habit-text"><strong>CC Evening — daily review &amp; tomorrow prep.</strong> Reviews what got done, updates reminders, flags carry-overs, and preps tomorrow's context. End every workday here.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">*</span>
-      <span class="habit-text"><strong>One task per session.</strong> Morning plan gives you the list. Execute each item in its own session. <span class="highlight">/clear</span> between. No context bleed.</span>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════ -->
-  <div class="section-label">From the Source</div>
-  <!-- ═══════════════════════════════════════ -->
-
-  <div class="grid">
-
-    <div class="card">
-      <div class="card-title pink"><span class="dot"></span> Thariq @ Anthropic</div>
-      <div class="habit">
-        <span class="habit-text"><strong>Skills are folders, not just files.</strong> Include scripts, data, assets alongside SKILL.md. Claude discovers them progressively.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Gotchas section = highest signal.</strong> Build up from failure points over time. Update after every recurring mistake.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>File system = context engineering.</strong> Structure for progressive disclosure, not flat dumps.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Claude Code is a general agent.</strong> Not just for code — research, planning, analysis, communication, anything.</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title blue"><span class="dot"></span> Official Best Practices</div>
-      <div class="habit">
-        <span class="habit-text"><strong>Verification is #1.</strong> Give Claude tests, expected output, screenshots. It catches its own mistakes — you become the director, not the debugger.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Let Claude interview you.</strong> For big features, start with "interview me about this." Claude surfaces edge cases you haven't considered.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Pipe data in.</strong> <span class="highlight">cat error.log | claude</span> is faster than pasting. Use <span class="highlight">@file</span> to reference files in prompts.</span>
-      </div>
-      <div class="habit">
-        <span class="habit-text"><strong>Run non-interactive in CI.</strong> <span class="highlight">claude -p "prompt"</span> for automated pipelines — test fixing, code review, doc generation.</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Anti-patterns -->
-  <div class="card">
-    <div class="card-title red"><span class="dot"></span> Anti-Patterns — Stop Doing These</div>
-    <div class="habit">
-      <span class="habit-num">X</span>
-      <span class="habit-text"><strong>Kitchen sink sessions.</strong> Start with one task, drift to another, then back. Context fills with irrelevant noise. Use <span class="highlight">/clear</span>.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">X</span>
-      <span class="habit-text"><strong>Correction loops.</strong> Correcting Claude 3+ times in a row. Context is polluted with failed approaches. <span class="highlight">/clear</span> and rewrite the prompt.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">X</span>
-      <span class="habit-text"><strong>Bloated CLAUDE.md.</strong> If it's over 5KB, Claude starts ignoring rules. Prune ruthlessly. Move domain knowledge to skills (loaded on demand).</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">X</span>
-      <span class="habit-text"><strong>Infinite exploration.</strong> "Investigate the codebase" without scope. Claude reads hundreds of files, fills context. Always scope narrowly or use subagents.</span>
-    </div>
-    <div class="habit">
-      <span class="habit-num">X</span>
-      <span class="habit-text"><strong>Trust without verification.</strong> Claude produces plausible code that misses edge cases. No tests = no confidence. Always verify before shipping.</span>
-    </div>
-  </div>
-
-  <div class="footer">
-    <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Official Docs</a>
-    &nbsp;&middot;&nbsp;
-    <a href="https://x.com/trq212" target="_blank">Thariq's Tips</a>
-    &nbsp;&middot;&nbsp;
-    <a href="https://github.com/prody-dris/claude-code-cheatsheet" target="_blank">Source</a>
-    <div class="credit">
-      Built by Nihaan Mohammed with Claude Code<br>
-      Living document — updated as new practices emerge
-    </div>
+    <div class="foot-credit">Nihaan Mohammed &middot; Living document</div>
   </div>
 
 </div>
