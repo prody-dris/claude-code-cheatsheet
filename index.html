@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Cheatsheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0a0a1a;
+    --surface: rgba(255, 255, 255, 0.04);
+    --surface-hover: rgba(255, 255, 255, 0.07);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #e8e8f0;
+    --text-dim: #8888a8;
+    --accent-purple: #c084fc;
+    --accent-blue: #60a5fa;
+    --accent-amber: #fbbf24;
+    --accent-green: #4ade80;
+    --accent-pink: #f472b6;
+    --glow-purple: rgba(192, 132, 252, 0.15);
+    --glow-blue: rgba(96, 165, 250, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated gradient orbs */
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+    z-index: 0;
+    animation: float 20s ease-in-out infinite;
+  }
+  body::before {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--glow-purple), transparent 70%);
+    top: -200px; left: -100px;
+  }
+  body::after {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, var(--glow-blue), transparent 70%);
+    bottom: -150px; right: -100px;
+    animation-delay: -10s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .header .subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .header .updated {
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-top: 4px;
+    opacity: 0.6;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+  }
+  .card:hover {
+    background: var(--surface-hover);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .card-title.purple .dot { background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+  .card-title.blue .dot { background: var(--accent-blue); box-shadow: 0 0 12px var(--accent-blue); }
+  .card-title.amber .dot { background: var(--accent-amber); box-shadow: 0 0 12px var(--accent-amber); }
+  .card-title.green .dot { background: var(--accent-green); box-shadow: 0 0 12px var(--accent-green); }
+  .card-title.pink .dot { background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+  .card-title.purple { color: var(--accent-purple); }
+  .card-title.blue { color: var(--accent-blue); }
+  .card-title.amber { color: var(--accent-amber); }
+  .card-title.green { color: var(--accent-green); }
+  .card-title.pink { color: var(--accent-pink); }
+
+  /* Command rows */
+  .cmd-row {
+    display: flex;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.2s ease;
+  }
+  .cmd-row:last-child { border-bottom: none; }
+  .cmd-row:hover { padding-left: 8px; }
+
+  .cmd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-amber);
+    min-width: 180px;
+    flex-shrink: 0;
+  }
+  .desc {
+    color: var(--text-dim);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* Habit items */
+  .habit {
+    display: flex;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.2s ease;
+  }
+  .habit:last-child { border-bottom: none; }
+  .habit:hover { padding-left: 8px; }
+
+  .habit-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 14px;
+    min-width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .purple .habit-num { color: var(--accent-purple); background: rgba(192, 132, 252, 0.1); }
+  .blue .habit-num { color: var(--accent-blue); background: rgba(96, 165, 250, 0.1); }
+  .green .habit-num { color: var(--accent-green); background: rgba(74, 222, 128, 0.1); }
+  .pink .habit-num { color: var(--accent-pink); background: rgba(244, 114, 182, 0.1); }
+
+  .habit-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .habit-text strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  .tag.green { background: rgba(74, 222, 128, 0.15); color: var(--accent-green); }
+  .tag.purple { background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); }
+  .tag.blue { background: rgba(96, 165, 250, 0.15); color: var(--accent-blue); }
+
+  .highlight { color: var(--accent-amber); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  /* Two-column grid for smaller cards */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; }
+    .cmd { min-width: 120px; }
+    .container { padding: 24px 16px; }
+    .header h1 { font-size: 22px; }
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .footer a {
+    color: var(--accent-purple);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .footer a:hover { color: var(--accent-blue); }
+  .footer .credit {
+    color: var(--text-dim);
+    font-size: 11px;
+    margin-top: 6px;
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>Claude Code Cheatsheet</h1>
+    <div class="subtitle">Best practices for effective AI-assisted development</div>
+    <div class="updated">Last updated: 25 March 2026</div>
+  </div>
+
+  <!-- Session Hygiene -->
+  <div class="card">
+    <div class="card-title purple"><span class="dot"></span> Session Hygiene</div>
+    <div class="cmd-row">
+      <span class="cmd">/clear</span>
+      <span class="desc">Between unrelated tasks. Clean reset beats lossy compact. Always.</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">/btw</span>
+      <span class="desc">Quick side questions. Never enters context history. Zero token cost.</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">/rename</span>
+      <span class="desc">Name sessions like branches: <span class="highlight">srh-uat-fixes</span>, <span class="highlight">oauth-spec</span></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">claude --resume</span>
+      <span class="desc">Pick up named sessions. <span class="highlight">--continue</span> for the most recent one.</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">/compact &lt;focus&gt;</span>
+      <span class="desc">Only when staying on the same task but context is getting heavy.</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">Esc + Esc</span>
+      <span class="desc">Rewind to any checkpoint. Restore code, conversation, or both.</span>
+    </div>
+  </div>
+
+  <!-- Workflow Habits -->
+  <div class="card">
+    <div class="card-title blue"><span class="dot"></span> Workflow Habits</div>
+    <div class="habit">
+      <span class="habit-num">1</span>
+      <span class="habit-text"><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run" — lets Claude calibrate effort and tools.</span>
+    </div>
+    <div class="habit">
+      <span class="habit-num">2</span>
+      <span class="habit-text"><strong>Interview pattern for big features.</strong> "Interview me about this feature using AskUserQuestion. Dig into edge cases and tradeoffs." Then write the spec in a fresh session.</span>
+    </div>
+    <div class="habit">
+      <span class="habit-num">3</span>
+      <span class="habit-text"><strong>Writer/Reviewer split.</strong> One session writes code. A fresh session reviews it. Fresh context = no self-bias.</span>
+    </div>
+    <div class="habit">
+      <span class="habit-num">4</span>
+      <span class="habit-text"><strong>Give verification criteria.</strong> Tests, screenshots, expected output. The single highest-leverage thing you can do. <span class="tag green">2-3x quality</span></span>
+    </div>
+    <div class="habit">
+      <span class="habit-num">5</span>
+      <span class="habit-text"><strong>Explore &gt; Plan &gt; Implement &gt; Commit.</strong> Use Plan Mode (Shift+Tab) for unknowns. Skip the ceremony for small fixes.</span>
+    </div>
+    <div class="habit">
+      <span class="habit-num">6</span>
+      <span class="habit-text"><strong>Two corrections max.</strong> If Claude fails twice on the same thing, <span class="highlight">/clear</span> and rewrite the prompt with what you learned.</span>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Token Efficiency -->
+    <div class="card">
+      <div class="card-title amber"><span class="dot"></span> Token Efficiency</div>
+      <div class="habit">
+        <span class="habit-text"><strong>Max 2 parallel agents.</strong> Default. Bypass when you have high token budget before reset.</span>
+      </div>
+      <div class="habit">
+        <span class="habit-text"><strong><span class="highlight">/effort medium</span></strong> for routine work. <strong><span class="highlight">/effort high</span></strong> for deep sessions.</span>
+      </div>
+      <div class="habit">
+        <span class="habit-text"><strong>Subagents for research.</strong> They explore in separate context, report back summaries only. Main stays clean.</span>
+      </div>
+      <div class="habit">
+        <span class="habit-text"><strong>CLI &gt; MCP.</strong> gh, curl, jq — no schema overhead. MCP only when CLI can't.</span>
+      </div>
+      <div class="habit">
+        <span class="habit-text"><strong>Scope investigations.</strong> "Check src/auth/" not "investigate the codebase". Narrow = fewer tokens.</span>
+      </div>
+    </div>
+
+    <!-- From Thariq -->
+    <div class="card">
+      <div class="card-title pink"><span class="dot"></span> From Thariq @ Anthropic</div>
+      <div class="habit">
+        <span class="habit-text"><strong>Skills are folders, not just files.</strong> Include scripts, data, assets alongside SKILL.md. Claude discovers them progressively.</span>
+      </div>
+      <div class="habit">
+        <span class="habit-text"><strong>Gotchas section = highest signal.</strong> Build up from failure points over time. Update after every recurring mistake.</span>
+      </div>
+      <div class="habit">
+        <span class="habit-text"><strong>File system = context engineering.</strong> Structure for progressive disclosure, not flat dumps. Let Claude pull what it needs.</span>
+      </div>
+      <div class="habit">
+        <span class="habit-text"><strong>Claude Code is a general agent.</strong> Not just for code — use it for research, planning, analysis, communication, anything.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CLAUDE.md Tips -->
+  <div class="card">
+    <div class="card-title green"><span class="dot"></span> CLAUDE.md Rules of Thumb</div>
+    <div class="habit">
+      <span class="habit-text"><strong>For each line ask:</strong> "Would removing this cause Claude to make mistakes?" If not, cut it.</span>
+    </div>
+    <div class="habit">
+      <span class="habit-text"><strong>If Claude ignores a rule,</strong> the file is too long and the rule is getting lost. Prune, don't add emphasis.</span>
+    </div>
+    <div class="habit">
+      <span class="habit-text"><strong>Hooks for musts, CLAUDE.md for shoulds.</strong> Advisory (80% adherence) vs deterministic (100%).</span>
+    </div>
+    <div class="habit">
+      <span class="habit-text"><strong>Don't document what Claude can infer.</strong> It reads your code. Only add what it can't figure out alone.</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Official Docs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://x.com/trq212" target="_blank">Thariq's Tips</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/prody-dris/claude-code-cheatsheet" target="_blank">Source on GitHub</a>
+    <div class="credit">Built with Claude Code &middot; Say "update the cheatsheet" to refresh</div>
+  </div>
+
+</div>
+
+</body>
+</html>
