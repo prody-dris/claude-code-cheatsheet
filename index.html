@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude Code Cheatsheet — Nihaan</title>
-<meta name="description" content="Compact Claude Code cheatsheet — session hygiene, workflow habits, token efficiency, auto mode, and setup patterns. Curated by Nihaan Mohammed.">
+<title>Claude Code — The Agent Playbook</title>
+<meta name="description" content="Living cheatsheet for Claude Code — session management, workflow habits, token efficiency, auto mode, and setup patterns. Updated daily.">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
-    --bg: #F7F5F0;
-    --text: #1A1A1A;
-    --text-mid: #444444;
-    --text-light: #8A8A82;
-    --gold: #B8960C;
-    --gold-bg: rgba(184, 150, 12, 0.07);
-    --red-bg: rgba(160, 40, 40, 0.05);
-    --red: #A03030;
-    --rule: rgba(0,0,0,0.06);
-    --code-bg: #1E1E1E;
-    --code-fg: #E2C44B;
-    --carpet: #C8960F;
-    --carpet-dark: #5C440A;
-    --carpet-red: #9B3322;
+    --bg: #F5F4F0;
+    --text: #2A2A2A;
+    --text-mid: #505050;
+    --text-light: #929288;
+    --gold: #A68A0C;
+    --gold-bg: rgba(166, 138, 12, 0.06);
+    --red-bg: rgba(150, 40, 40, 0.05);
+    --red: #964040;
+    --rule: rgba(0,0,0,0.05);
+    --code-bg: #222222;
+    --code-fg: #DFBF3C;
+    --carpet: #C0900E;
+    --carpet-dark: #4A3808;
+    --carpet-red: #8B3020;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,23 +32,19 @@
     background: var(--bg);
     color: var(--text);
     font-size: 15px;
-    line-height: 1.7;
+    line-height: 1.75;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── Indian carpet border ── */
-  /* Inspired by Dhurrie / Kilim geometric weave patterns */
+  /* ── Dhurrie border ── */
   body::before, body::after {
     content: '';
     position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 28px;
+    top: 0; bottom: 0;
+    width: 20px;
     z-index: 10;
     background:
-      /* Diamond chain */
-      repeating-linear-gradient(
-        180deg,
+      repeating-linear-gradient(180deg,
         var(--carpet) 0px, var(--carpet) 2px,
         transparent 2px, transparent 6px,
         var(--carpet-dark) 6px, var(--carpet-dark) 8px,
@@ -58,76 +54,57 @@
         var(--carpet) 18px, var(--carpet) 20px,
         transparent 20px, transparent 28px
       ),
-      /* Stepped zigzag overlay */
-      repeating-linear-gradient(
-        180deg,
-        transparent 0px, transparent 14px,
-        var(--carpet-dark) 14px, var(--carpet-dark) 16px,
-        transparent 16px, transparent 28px
-      ),
-      /* Base stripe */
       linear-gradient(90deg,
-        var(--carpet-dark) 0px, var(--carpet-dark) 3px,
-        rgba(200, 150, 15, 0.15) 3px, rgba(200, 150, 15, 0.15) 25px,
-        var(--carpet-dark) 25px, var(--carpet-dark) 28px
+        var(--carpet-dark) 0px, var(--carpet-dark) 2px,
+        rgba(192, 144, 14, 0.1) 2px, rgba(192, 144, 14, 0.1) 18px,
+        var(--carpet-dark) 18px, var(--carpet-dark) 20px
       );
   }
   body::before { left: 0; }
   body::after { right: 0; }
 
   .page {
-    max-width: 660px;
+    max-width: 640px;
     margin: 0 auto;
-    padding: 44px 28px 52px;
+    padding: 44px 24px 48px;
   }
 
   /* ── Header ── */
-  header {
-    margin-bottom: 36px;
-  }
+  header { margin-bottom: 36px; }
   header h1 {
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: -0.3px;
   }
   header h1 span { color: var(--gold); }
-  header .meta {
-    font-size: 12.5px;
+  header .sub {
+    font-size: 13px;
     color: var(--text-light);
-    margin-top: 2px;
+    margin-top: 1px;
   }
   header .quip {
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--text-light);
     font-style: italic;
-    margin-top: 6px;
-    opacity: 0.7;
+    margin-top: 8px;
+    opacity: 0.65;
   }
 
   /* ── Section ── */
-  section {
-    margin-bottom: 28px;
-  }
+  section { margin-bottom: 28px; }
   section h2 {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2.5px;
     color: var(--gold);
-    margin-bottom: 4px;
+    margin-bottom: 10px;
   }
   section h2 small {
     font-weight: 400;
     text-transform: none;
     letter-spacing: 0;
     color: var(--text-light);
-    font-size: 11px;
-  }
-  .aside {
-    font-size: 11.5px;
-    color: var(--text-light);
-    margin-bottom: 10px;
-    font-style: italic;
   }
 
   /* ── Rows ── */
@@ -150,20 +127,14 @@
     border-radius: 3px;
     white-space: nowrap;
   }
-
   .r code:first-child {
-    min-width: 120px;
+    min-width: 115px;
     text-align: center;
     flex-shrink: 0;
   }
+  .r span { color: var(--text-mid); font-size: 14px; }
 
-  .r span, .n p {
-    color: var(--text-mid);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  /* ── Numbered items ── */
+  /* ── List items ── */
   .n {
     display: flex;
     gap: 10px;
@@ -171,58 +142,40 @@
     border-bottom: 1px solid var(--rule);
   }
   .n:last-child { border-bottom: none; }
-
   .n i {
     font-style: normal;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 600;
     font-size: 11px;
-    min-width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
     border-radius: 3px;
     flex-shrink: 0;
     margin-top: 3px;
     background: var(--gold-bg);
     color: var(--gold);
   }
-  .n i.x {
-    background: var(--red-bg);
-    color: var(--red);
-  }
+  .n i.x { background: var(--red-bg); color: var(--red); }
+  .n p { color: var(--text-mid); font-size: 14px; line-height: 1.6; }
+  .n p strong { color: var(--text); font-weight: 600; }
 
-  .n p strong {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  /* ── Two-col ── */
-  .cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 28px;
-  }
+  /* ── Cols ── */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
 
   /* ── Callout ── */
   .callout {
     background: var(--gold-bg);
     border-left: 3px solid var(--gold);
-    padding: 12px 16px;
+    padding: 11px 15px;
     border-radius: 0 5px 5px 0;
     margin-bottom: 8px;
   }
-  .callout p {
-    font-size: 13.5px;
-    color: var(--text-mid);
-    line-height: 1.6;
-  }
+  .callout p { font-size: 13.5px; color: var(--text-mid); line-height: 1.6; }
   .callout strong { color: var(--text); }
 
   /* ── Footer ── */
   footer {
-    margin-top: 36px;
+    margin-top: 32px;
     padding-top: 14px;
     border-top: 1px solid var(--rule);
     display: flex;
@@ -238,14 +191,11 @@
     font-weight: 500;
   }
   footer a:hover { color: var(--gold); }
-  footer small {
-    font-size: 11px;
-    color: var(--text-light);
-  }
+  footer small { font-size: 11px; color: var(--text-light); }
 
   @media (max-width: 700px) {
-    body::before, body::after { width: 12px; }
-    .page { padding: 28px 18px 36px; }
+    body::before, body::after { width: 10px; }
+    .page { padding: 28px 16px 36px; }
     .cols { grid-template-columns: 1fr; }
     .r code:first-child { min-width: 90px; }
   }
@@ -256,40 +206,35 @@
 
 <header>
   <h1>Claude Code<span>.</span></h1>
-  <div class="meta">Nihaan Mohammed &mdash; Product Manager, Tech for Good &middot; 25 Mar 2026</div>
-  <div class="quip">"Any sufficiently optimized workflow is indistinguishable from laziness." &mdash; Corollary to Clarke's Third Law</div>
+  <div class="sub">The Agent Playbook &mdash; Nihaan Mohammed &middot; Product Manager, Tech for Good &middot; 25 Mar 2026</div>
+  <div class="quip">"Any sufficiently optimized workflow is indistinguishable from laziness."</div>
 </header>
 
 <!-- ── SESSION ── -->
 <section>
   <h2>Session</h2>
-  <p class="aside">Context is your Kardashev metric. Manage it or it manages you.</p>
-  <div class="r"><code>/clear</code><span>Between unrelated tasks. Clean reset > lossy compact.</span></div>
-  <div class="r"><code>/btw</code><span>Side questions without growing context. Zero cost.</span></div>
-  <div class="r"><code>/rename</code><span>Name sessions like branches. Resume later with <code>--resume</code>.</span></div>
+  <div class="r"><code>/clear</code><span>Between unrelated tasks. Clean reset > lossy summary.</span></div>
+  <div class="r"><code>/btw</code><span>Side questions that don't enter context. Zero token cost.</span></div>
+  <div class="r"><code>/rename</code><span>Name sessions like branches. Pick up later with <code>--resume</code>.</span></div>
   <div class="r"><code>Esc Esc</code><span>Rewind to any checkpoint. Restore code, conversation, or both.</span></div>
   <div class="r"><code>/effort</code><span><code>medium</code> for routine. <code>high</code> for deep work.</span></div>
 </section>
 
 <!-- ── AUTO MODE ── -->
 <section>
-  <h2>Auto Mode <small>— new, Mar 2026</small></h2>
-  <p class="aside">The classifier is your Bayesian bouncer. It updates on evidence, not vibes.</p>
+  <h2>Auto Mode <small>— new, 24 Mar 2026</small></h2>
   <div class="callout">
-    <p><strong>The middle path.</strong> A classifier reviews each tool call — safe actions proceed, risky ones get blocked. You can start tasks and walk away. Less interruption than default, less risk than skip-permissions.</p>
+    <p><strong>The middle path between default and bypass.</strong> A classifier reviews each tool call — safe actions proceed automatically, risky ones get blocked. Start tasks and walk away. Enable via <code>Shift+Tab</code> or <code>--permission-mode auto</code>.</p>
   </div>
-  <div class="r"><code>Shift+Tab</code><span>Toggle between Default, Auto, and Bypass in any session.</span></div>
-  <div class="r"><code>--permission-mode auto</code><span>Start in auto mode from the CLI.</span></div>
-  <div class="n"><i>!</i><p><strong>Still use hooks.</strong> Auto mode's classifier is good, not omniscient. Your PreToolUse hooks run regardless of permission mode.</p></div>
-  <div class="n"><i>!</i><p><strong>Slight cost increase.</strong> Classifier adds tokens per tool call. Worth it for long tasks. Overkill for quick questions.</p></div>
+  <div class="n"><i>!</i><p><strong>Still use hooks.</strong> The classifier is good, not omniscient. Your PreToolUse safety hooks run regardless of permission mode.</p></div>
+  <div class="n"><i>!</i><p><strong>Slight cost tradeoff.</strong> Classifier adds tokens per tool call. Worth it for long autonomous tasks. Skip for quick questions.</p></div>
 </section>
 
 <!-- ── WORKFLOW ── -->
 <section>
   <h2>Workflow</h2>
-  <p class="aside">Goodhart's Law applies to prompts. When you optimize for word count, you lose intent.</p>
   <div class="n"><i>1</i><p><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run".</p></div>
-  <div class="n"><i>2</i><p><strong>Interview before building.</strong> "Interview me using AskUserQuestion. Dig into edge cases." Spec in a fresh session.</p></div>
+  <div class="n"><i>2</i><p><strong>Interview before building.</strong> "Interview me about this feature. Dig into edge cases." Then spec in a fresh session.</p></div>
   <div class="n"><i>3</i><p><strong>Writer/Reviewer split.</strong> One session writes. A fresh one reviews. No self-bias.</p></div>
   <div class="n"><i>4</i><p><strong>Give verification.</strong> Tests, screenshots, expected output. Single highest-leverage habit.</p></div>
   <div class="n"><i>5</i><p><strong>Explore > Plan > Implement > Commit.</strong> Plan Mode for unknowns. Skip for trivial fixes.</p></div>
@@ -299,7 +244,6 @@
 <!-- ── TOKENS ── -->
 <section>
   <h2>Tokens</h2>
-  <p class="aside">Entropy isn't free. Every token you waste is a token that could've been thinking.</p>
   <div class="cols">
     <div>
       <div class="n"><i>$</i><p><strong>Max 2 parallel agents.</strong> Each loads ~7K overhead.</p></div>
@@ -317,40 +261,38 @@
 <!-- ── SETUP ── -->
 <section>
   <h2>Setup</h2>
-  <p class="aside">Your config is your prior. A strong prior lets the model do less work and get better results.</p>
   <div class="cols">
     <div>
-      <div class="n"><i>*</i><p><strong>CLAUDE.md: less is more.</strong> "Would removing this cause mistakes?" No? Cut it.</p></div>
-      <div class="n"><i>*</i><p><strong>Hooks for musts.</strong> CLAUDE.md ~80%. Hooks = 100%.</p></div>
+      <div class="n"><i>*</i><p><strong>CLAUDE.md: less is more.</strong> Would removing this cause mistakes? No? Cut it.</p></div>
+      <div class="n"><i>*</i><p><strong>Hooks for musts.</strong> CLAUDE.md ~80% adherence. Hooks = 100%.</p></div>
       <div class="n"><i>*</i><p><strong>Memory cap: 15 files.</strong> Merge before adding. Index only.</p></div>
     </div>
     <div>
       <div class="n"><i>*</i><p><strong>Skills are folders.</strong> Scripts, data, assets. Progressive disclosure.</p></div>
       <div class="n"><i>*</i><p><strong>Gotchas = gold.</strong> Build from failures. Update after every mistake.</p></div>
-      <div class="n"><i>*</i><p><strong>Push CLAUDE.md to git.</strong> Shared context. Compounds over time.</p></div>
+      <div class="n"><i>*</i><p><strong>Push CLAUDE.md to git.</strong> Shared context compounds over time.</p></div>
     </div>
   </div>
 </section>
 
 <!-- ── DON'T ── -->
 <section>
-  <h2>Don't</h2>
-  <p class="aside">Moloch wins every time you ignore these. Coordination failures start small.</p>
+  <h2>Avoid</h2>
   <div class="n"><i class="x">X</i><p><strong>Kitchen sink sessions.</strong> One task drifts into three. <code>/clear</code> between.</p></div>
-  <div class="n"><i class="x">X</i><p><strong>Correction loops.</strong> 3+ corrections = polluted context. Rewrite the prompt.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Correction loops.</strong> 3+ corrections = polluted context. Rewrite the prompt instead.</p></div>
   <div class="n"><i class="x">X</i><p><strong>Bloated CLAUDE.md.</strong> Over 5KB and rules get lost. Move knowledge to skills.</p></div>
   <div class="n"><i class="x">X</i><p><strong>Unscoped exploration.</strong> "Investigate everything" fills context. Scope or use subagents.</p></div>
-  <div class="n"><i class="x">X</i><p><strong>Ship without verification.</strong> Plausible != correct. No tests = no confidence.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Ship without verification.</strong> Plausible != correct. No tests, no confidence.</p></div>
 </section>
 
 <footer>
   <div>
     <a href="https://code.claude.com/docs/en/best-practices">Docs</a> &middot;
     <a href="https://claude.com/blog/auto-mode">Auto Mode</a> &middot;
-    <a href="https://x.com/trq212">Thariq</a> &middot;
+    <a href="https://x.com/trq212">Thariq @ Anthropic</a> &middot;
     <a href="https://github.com/prody-dris/claude-code-cheatsheet">Source</a>
   </div>
-  <small>Living document &middot; Nihaan Mohammed</small>
+  <small>Updated daily &middot; Nihaan Mohammed</small>
 </footer>
 
 </div>
