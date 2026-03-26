@@ -10,20 +10,26 @@
 
   :root {
     --bg: #F6F5F1;
+    --bg-card: #FFFFFF;
     --text: #2C2C2C;
     --text-mid: #525250;
     --text-light: #96968E;
     --gold: #A6880A;
+    --gold-light: #C4A30D;
     --gold-bg: rgba(166, 136, 10, 0.055);
+    --gold-bg-strong: rgba(166, 136, 10, 0.1);
     --red-bg: rgba(150, 40, 40, 0.045);
     --red: #8C3838;
-    --rule: rgba(0,0,0,0.045);
-    --code-bg: #232323;
+    --rule: rgba(0,0,0,0.05);
+    --code-bg: #1E1E1E;
     --code-fg: #DDB93A;
     --carpet: #BF8E0D;
     --carpet-dk: #4A3808;
     --carpet-rd: #8B3020;
-    --new-bg: rgba(166, 136, 10, 0.1);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-md: 0 3px 8px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.04);
+    --radius: 8px;
+    --radius-sm: 5px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,6 +43,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ── Dhurrie carpet borders ── */
   body::before, body::after {
     content: '';
     position: fixed;
@@ -63,16 +70,27 @@
   body::before { left: 0; }
   body::after { right: 0; }
 
-  .page { max-width: 620px; margin: 0 auto; padding: 40px 24px 44px; }
+  .page { max-width: 640px; margin: 0 auto; padding: 44px 24px 48px; }
 
   /* ── Header ── */
-  header { margin-bottom: 32px; }
-  header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
-  header h1 span { color: var(--gold); }
-  header .sub { font-size: 12.5px; color: var(--text-light); margin-top: 1px; }
+  header { margin-bottom: 28px; }
+  header h1 {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.4px;
+    display: flex; align-items: baseline; gap: 2px;
+  }
+  header h1 span { color: var(--gold); font-size: 28px; line-height: 1; }
+  header .sub {
+    font-size: 12.5px; color: var(--text-light); margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
   header .quip {
     font-size: 11.5px; color: var(--text-light);
-    font-style: italic; margin-top: 8px; opacity: 0.6;
+    font-style: italic; margin-top: 10px; opacity: 0.55;
+  }
+  .header-rule {
+    width: 48px; height: 2px; margin-top: 16px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border: none; border-radius: 1px;
   }
 
   /* ── Timestamp ── */
@@ -82,99 +100,141 @@
     color: var(--text-light);
     background: var(--gold-bg);
     display: inline-block;
-    padding: 3px 10px;
-    border-radius: 3px;
-    margin-bottom: 24px;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
     letter-spacing: 0.5px;
+    border: 1px solid rgba(166, 136, 10, 0.08);
   }
 
-  /* ── Section ── */
-  section { margin-bottom: 26px; }
+  /* ── How to use hint ── */
+  .hint {
+    font-size: 11.5px; color: var(--text-light);
+    margin-bottom: 28px; line-height: 1.65;
+  }
+  .hint strong { color: var(--text-mid); font-weight: 600; }
+
+  /* ── Section card ── */
+  section {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 20px 22px 16px;
+    margin-bottom: 16px;
+    transition: box-shadow 0.2s ease;
+  }
+  section:hover { box-shadow: var(--shadow-md); }
+
   section h2 {
-    font-size: 11px; font-weight: 700;
+    font-size: 10.5px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 2.5px;
-    color: var(--gold); margin-bottom: 8px;
+    color: var(--gold); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
   }
   section h2 small {
     font-weight: 400; text-transform: none;
     letter-spacing: 0; color: var(--text-light);
+    font-size: 11px;
   }
   section h2 .badge {
-    font-size: 9px; font-weight: 600;
-    background: var(--new-bg); color: var(--gold);
-    padding: 1px 6px; border-radius: 3px;
-    text-transform: uppercase; letter-spacing: 1px;
-    margin-left: 6px; vertical-align: middle;
+    font-size: 8.5px; font-weight: 700;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: #fff;
+    padding: 2px 7px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    margin-left: 2px;
   }
 
-  /* ── Rows ── */
+  /* ── Rows (command → description) ── */
   .r {
     display: flex; align-items: baseline;
-    gap: 14px; padding: 6px 0;
+    gap: 14px; padding: 7px 0;
     border-bottom: 1px solid var(--rule);
+    transition: background 0.15s ease;
   }
+  .r:hover { background: var(--gold-bg); margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: 4px; }
   .r:last-child { border-bottom: none; }
   code {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11.5px; font-weight: 500;
     background: var(--code-bg); color: var(--code-fg);
-    padding: 2px 7px; border-radius: 3px; white-space: nowrap;
+    padding: 2px 8px; border-radius: 4px; white-space: nowrap;
   }
-  .r code:first-child { min-width: 110px; text-align: center; flex-shrink: 0; }
+  .r code:first-child { min-width: 115px; text-align: center; flex-shrink: 0; }
   .r span { color: var(--text-mid); font-size: 13.5px; }
 
-  /* ── List items ── */
+  /* ── Numbered / icon list items ── */
   .n {
-    display: flex; gap: 10px;
-    padding: 6px 0;
+    display: flex; gap: 12px;
+    padding: 7px 0;
     border-bottom: 1px solid var(--rule);
+    transition: background 0.15s ease;
   }
+  .n:hover { background: var(--gold-bg); margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: 4px; }
   .n:last-child { border-bottom: none; }
   .n i {
     font-style: normal;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 600; font-size: 10px;
-    min-width: 18px; height: 18px;
+    min-width: 20px; height: 20px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 3px; flex-shrink: 0; margin-top: 4px;
-    background: var(--gold-bg); color: var(--gold);
+    border-radius: 4px; flex-shrink: 0; margin-top: 3px;
+    background: var(--gold-bg-strong); color: var(--gold);
   }
   .n i.x { background: var(--red-bg); color: var(--red); }
-  .n p { color: var(--text-mid); font-size: 13.5px; line-height: 1.6; }
+  .n p { color: var(--text-mid); font-size: 13.5px; line-height: 1.65; }
   .n p strong { color: var(--text); font-weight: 600; }
 
-  /* ── Cols ── */
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+  /* ── Columns ── */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
 
   /* ── Callout ── */
   .callout {
     background: var(--gold-bg);
     border-left: 3px solid var(--gold);
-    padding: 10px 14px; border-radius: 0 4px 4px 0;
-    margin-bottom: 6px;
+    padding: 12px 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(166, 136, 10, 0.06);
   }
-  .callout p { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+  .callout p { font-size: 13px; color: var(--text-mid); line-height: 1.65; }
   .callout strong { color: var(--text); }
+
+  /* ── Divider between section groups ── */
+  .divider {
+    border: none; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rule), transparent);
+    margin: 8px 0;
+  }
 
   /* ── Footer ── */
   footer {
-    margin-top: 28px; padding-top: 12px;
+    margin-top: 24px; padding: 14px 0 0;
     border-top: 1px solid var(--rule);
     display: flex; justify-content: space-between;
-    align-items: baseline; flex-wrap: wrap; gap: 6px;
+    align-items: baseline; flex-wrap: wrap; gap: 8px;
   }
   footer a {
     font-size: 11px; color: var(--text-light);
     text-decoration: none; font-weight: 500;
+    transition: color 0.15s ease;
   }
   footer a:hover { color: var(--gold); }
   footer small { font-size: 10.5px; color: var(--text-light); }
 
+  /* ── Print ── */
+  @media print {
+    body::before, body::after { display: none; }
+    section { box-shadow: none; break-inside: avoid; border: 1px solid #ddd; }
+    .r:hover, .n:hover { background: none; margin: 0; padding-left: 0; padding-right: 0; }
+  }
+
   @media (max-width: 660px) {
     body::before, body::after { width: 8px; }
-    .page { padding: 24px 14px 32px; }
+    .page { padding: 28px 14px 36px; }
     .cols { grid-template-columns: 1fr; }
-    .r code:first-child { min-width: 85px; }
+    .r code:first-child { min-width: 90px; }
+    section { padding: 16px 16px 12px; }
   }
 </style>
 </head>
@@ -185,48 +245,48 @@
   <h1>Claude Code<span>.</span></h1>
   <div class="sub">The Agent Playbook &mdash; Nihaan Mohammed &middot; Product Manager, Tech for Good</div>
   <div class="quip">"Any sufficiently optimized workflow is indistinguishable from laziness." &mdash; Corollary to Clarke's Third</div>
+  <hr class="header-rule">
 </header>
 
-<div class="timestamp">Last updated: 26 Mar 2026, 11:00 PM IST</div>
+<div class="timestamp">Last updated: 27 Mar 2026, 1:00 AM IST</div>
 
-<!-- ══ HOW TO USE ══ -->
-<div style="font-size:11.5px;color:var(--text-light);margin-bottom:24px;line-height:1.6;">
-  <strong style="color:var(--text-mid)">Use this page as your AI's daily reference.</strong> Add to your CLAUDE.md: <code style="font-size:10.5px">Read https://prody-dris.github.io/claude-code-cheatsheet/ and apply these practices.</code> Updated daily &mdash; your agent gets curated patterns instead of burning tokens scraping the internet.
+<div class="hint">
+  <strong>Use this page as your AI's daily reference.</strong> Add to your CLAUDE.md: <code style="font-size:10.5px">Read https://prody-dris.github.io/claude-code-cheatsheet/ and apply these practices.</code> Updated daily &mdash; your agent gets curated patterns instead of burning tokens scraping the internet.
 </div>
 
 <!-- ══ WHAT'S NEW ══ -->
 <section>
   <h2>What's New <span class="badge">Latest</span></h2>
   <div class="callout">
-    <p><strong>Scheduled Tasks &amp; /loop</strong> (Mar 2026) &mdash; Recurring tasks in CLI. <code>/loop 5m check deploy</code> for interval-based, <code>CronCreate</code> for precise cron schedules. Pass <code>durable: true</code> to persist across sessions. Auto-expires after 7 days. Mac must be awake and Claude Code open for tasks to fire.</p>
+    <p><strong>Computer Use &amp; Remote Control</strong> (Mar 24) &mdash; Claude Code can now operate your desktop: open files, control browsers, run dev tools. <code>/remote-control</code> bridges to claude.ai/code &mdash; message your Mac from your phone and have it execute tasks while you're away.</p>
   </div>
-  <div class="n"><i>+</i><p><strong>Knowledge Architecture</strong> (26 Mar) &mdash; Structure project repos with <code>.context/</code> folder: CLAUDE.md (identity), heartbeat.md (in-progress), MEMORY.md (index), decisions.md (reasoning), SECURITY.md (guardrails). AI never starts from scratch.</p></div>
-  <div class="n"><i>+</i><p><strong>Code Review</strong> (24 Mar) &mdash; Agent team dispatched on every PR for deep review. The same system run on PRs at Anthropic. Research preview on Team/Enterprise.</p></div>
-  <div class="n"><i>+</i><p><strong>Auto Mode</strong> (24 Mar) &mdash; A classifier reviews each tool call before it runs. Safe actions proceed, risky ones get blocked. <code>Shift+Tab</code> cycles through: default &rarr; acceptEdits &rarr; plan &rarr; auto. Your safety hooks still run on top.</p></div>
-  <div class="n"><i>+</i><p><strong>Tool Search</strong> &mdash; MCP servers with 50+ tools no longer bloat context. Claude dynamically loads only the tools it needs via <code>ToolSearch</code>. Saves hundreds of tokens per call.</p></div>
+  <div class="n"><i>+</i><p><strong>Voice Mode</strong> (Mar 24) &mdash; Hold spacebar to talk. 30 languages. Dictate specs, describe bugs, brainstorm hands-free. Push-to-talk, not always-on.</p></div>
+  <div class="n"><i>+</i><p><strong>Opus 4.6 + 1M Context</strong> &mdash; New default model. 1M token context window on Max/Team/Enterprise. <code>/fast</code> toggles faster output, same model. Output cap raised to 64K tokens (128K max).</p></div>
+  <div class="n"><i>+</i><p><strong>Agent Teams</strong> &mdash; Multiple agents collaborate on a task. <code>TeammateIdle</code> and <code>TaskCompleted</code> hook events coordinate handoffs. Code Review on every PR &mdash; same system Anthropic runs internally.</p></div>
 </section>
 
 <!-- ── SESSION ── -->
 <section>
   <h2>Session</h2>
-  <div class="r"><code>/clear</code><span>Between unrelated tasks. Clean reset > lossy summary.</span></div>
+  <div class="r"><code>/clear</code><span>Between unrelated tasks. Clean reset &gt; lossy summary.</span></div>
   <div class="r"><code>/btw</code><span>Side questions that don't enter context. Zero token cost.</span></div>
-  <div class="r"><code>/rename</code><span>Name sessions like branches. Pick up later with <code>--resume</code>.</span></div>
+  <div class="r"><code>/fast</code><span>Toggle fast mode. Same Opus 4.6 model, faster output.</span></div>
+  <div class="r"><code>/effort</code><span><code>low</code> <code>medium</code> <code>high</code>. Or <code>auto</code> &mdash; Claude picks per-turn.</span></div>
+  <div class="r"><code>Shift+Tab</code><span>Cycle permission modes: default &rarr; acceptEdits &rarr; plan &rarr; auto.</span></div>
   <div class="r"><code>Esc Esc</code><span>Rewind to any checkpoint. Restore code, conversation, or both.</span></div>
-  <div class="r"><code>/effort</code><span><code>medium</code> for routine. <code>high</code> for deep work.</span></div>
+  <div class="r"><code>/rename</code><span>Name sessions like branches. Resume later with <code>--resume</code>.</span></div>
   <div class="r"><code>/loop</code><span>Recurring tasks: <code>/loop 30m check PRs</code>. Session-scoped by default.</span></div>
-  <div class="r"><code>/config</code><span>Set output style: Explanatory, Concise, or Technical. Custom styles in <code>~/.claude/output-styles/</code>.</span></div>
 </section>
 
 <!-- ── WORKFLOW ── -->
 <section>
   <h2>Workflow</h2>
-  <div class="n"><i>1</i><p><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run".</p></div>
+  <div class="n"><i>1</i><p><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run". Sets expectations both ways.</p></div>
   <div class="n"><i>2</i><p><strong>Interview before building.</strong> Have Claude ask you the hard questions first. Then spec in a fresh session.</p></div>
-  <div class="n"><i>3</i><p><strong>Writer/Reviewer split.</strong> One session writes. A fresh one reviews. No self-bias.</p></div>
+  <div class="n"><i>3</i><p><strong>Writer/Reviewer split.</strong> One session writes. A fresh one reviews. No self-bias. Code Review agent now does this automatically on PRs.</p></div>
   <div class="n"><i>4</i><p><strong>Give verification.</strong> Tests, screenshots, expected output. Install LSP plugins &mdash; they give Claude automatic diagnostics after every edit. Highest-impact plugin you can install.</p></div>
-  <div class="n"><i>5</i><p><strong>Explore &gt; Plan &gt; Implement &gt; Commit.</strong> Plan Mode (<code>Shift+Tab</code>) for unknowns. Skip for trivial fixes.</p></div>
-  <div class="n"><i>6</i><p><strong>Two corrections max.</strong> Third fail = <code>/clear</code> and rewrite. Don't Goodhart your prompts &mdash; optimize for clarity, not length.</p></div>
+  <div class="n"><i>5</i><p><strong>Explore &gt; Plan &gt; Implement &gt; Commit.</strong> Plan Mode (<code>Shift+Tab</code>) for unknowns. Auto Mode for trusted execution. Skip for trivial fixes.</p></div>
+  <div class="n"><i>6</i><p><strong>Two corrections max.</strong> Third fail = <code>/clear</code> and rewrite the prompt. Don't Goodhart &mdash; optimize for clarity, not length.</p></div>
 </section>
 
 <!-- ── SCHEDULING ── -->
@@ -244,14 +304,14 @@
   <h2>Tokens <small>&mdash; every wasted token is a thought that never happened</small></h2>
   <div class="cols">
     <div>
-      <div class="n"><i>$</i><p><strong>Max 2 parallel agents.</strong> Each loads ~7K overhead.</p></div>
-      <div class="n"><i>$</i><p><strong>CLI > MCP.</strong> <code>gh</code> <code>curl</code> <code>jq</code> &mdash; no schema bloat.</p></div>
-      <div class="n"><i>$</i><p><strong>Disable unused plugins.</strong> 300-500 tokens each.</p></div>
+      <div class="n"><i>$</i><p><strong>Max 2 parallel agents.</strong> Each loads ~7K overhead. Bypass only with high budget.</p></div>
+      <div class="n"><i>$</i><p><strong>CLI &gt; MCP.</strong> <code>gh</code> <code>curl</code> <code>jq</code> &mdash; no schema bloat.</p></div>
+      <div class="n"><i>$</i><p><strong>ToolSearch saves tokens.</strong> 50+ tool servers load on demand, not upfront.</p></div>
     </div>
     <div>
       <div class="n"><i>$</i><p><strong>Subagents for research.</strong> Separate context. Summary back.</p></div>
       <div class="n"><i>$</i><p><strong>Scope narrowly.</strong> "Check src/auth/" not "investigate".</p></div>
-      <div class="n"><i>$</i><p><strong>Skills over MCPs.</strong> Transparent, reviewable, no black boxes. Hundreds in active use at Anthropic.</p></div>
+      <div class="n"><i>$</i><p><strong>Skills over MCPs.</strong> Transparent, reviewable, no black boxes.</p></div>
     </div>
   </div>
 </section>
@@ -262,7 +322,7 @@
   <div class="cols">
     <div>
       <div class="n"><i>*</i><p><strong>CLAUDE.md: less is more.</strong> Would removing this cause mistakes? No? Cut it.</p></div>
-      <div class="n"><i>*</i><p><strong>Hooks for musts.</strong> CLAUDE.md ~80% adherence. Hooks = 100%.</p></div>
+      <div class="n"><i>*</i><p><strong>Hooks for musts.</strong> CLAUDE.md ~80% adherence. Hooks = 100%. Auto Mode adds AI-based classification on top.</p></div>
       <div class="n"><i>*</i><p><strong>Memory cap: 15 files.</strong> Merge before adding. Index only.</p></div>
     </div>
     <div>
@@ -275,25 +335,25 @@
 
 <!-- ── KNOWLEDGE ARCHITECTURE ── -->
 <section>
-  <h2>Knowledge Architecture <span class="badge">New</span></h2>
+  <h2>Knowledge Architecture</h2>
   <div class="callout">
     <p><strong>The .context folder pattern.</strong> Every project repo gets a <code>.context/</code> directory. This is how AI remembers across sessions. Structure it once, benefit forever.</p>
   </div>
   <div class="n"><i>1</i><p><strong>CLAUDE.md</strong> &mdash; Identity &amp; instructions. Who you are, tech stack, communication style, who you serve. The onboarding doc AI reads in 2 seconds.</p></div>
   <div class="n"><i>2</i><p><strong>heartbeat.md</strong> &mdash; What's in progress <em>right now</em>. Active deployments, current sprint, blockers. Update every session. AI picks up where you left off.</p></div>
-  <div class="n"><i>3</i><p><strong>MEMORY.md</strong> &mdash; Index of persistent learnings. Each memory is a separate <code>.md</code> file in <code>memories/</code>. Append-only &mdash; mark superseded, never delete.</p></div>
-  <div class="n"><i>4</i><p><strong>decisions.md</strong> &mdash; The "why" behind choices. Why approach A over B. Data fixtures are single source of truth. Future-you will thank you.</p></div>
-  <div class="n"><i>5</i><p><strong>SECURITY.md</strong> &mdash; Non-negotiable guardrails. No secrets in code, parameterised queries, permissions on every DocType, AI-generated code checks. Goes in <em>every</em> repo.</p></div>
-  <div class="n"><i>6</i><p><strong>glossary.md</strong> &mdash; Domain-specific vocabulary. What "UC" means, what "disbursement" means in your context. Prevents AI from guessing wrong.</p></div>
+  <div class="n"><i>3</i><p><strong>MEMORY.md</strong> &mdash; Index of persistent learnings. Each memory is a separate <code>.md</code> file. Append-only &mdash; mark superseded, never delete.</p></div>
+  <div class="n"><i>4</i><p><strong>decisions.md</strong> &mdash; The "why" behind choices. Why approach A over B. Future-you will thank you.</p></div>
+  <div class="n"><i>5</i><p><strong>SECURITY.md</strong> &mdash; Non-negotiable guardrails. No secrets in code, parameterised queries, permissions on every DocType. Goes in <em>every</em> repo.</p></div>
+  <div class="n"><i>6</i><p><strong>glossary.md</strong> &mdash; Domain-specific vocabulary. Prevents AI from guessing wrong.</p></div>
 </section>
 
 <!-- ── CONTEXT BLOAT ── -->
 <section>
   <h2>Context Bloat <small>&mdash; AI burnout is real</small></h2>
-  <div class="n"><i>!</i><p><strong>Long threads = worse output.</strong> Token cost rises, hallucinations creep in. Same task, different quality at conversation start vs end. Like giving work at 9 AM vs 6 PM.</p></div>
+  <div class="n"><i>!</i><p><strong>Long threads = worse output.</strong> Token cost rises, hallucinations creep in. Same task, different quality at conversation start vs end.</p></div>
   <div class="n"><i>!</i><p><strong>Close, don't continue.</strong> When a conversation gets long, close it. Start fresh. Update CLAUDE.md with learnings. 2 minutes of updates saves 20 minutes of re-explaining.</p></div>
-  <div class="n"><i>!</i><p><strong>UI reads, CLI writes.</strong> Claude UI can read your GitHub repos via token. But for writing (commits, PRs, file updates), you need Claude Code / CLI. UI is texting; CLI is pair programming.</p></div>
-  <div class="n"><i>!</i><p><strong>Invest in docs, not prompts.</strong> 1.5 days of clear documentation > 2 weeks of prompt trial-and-error. Structure your input so AI works on the first attempt.</p></div>
+  <div class="n"><i>!</i><p><strong>UI reads, CLI writes.</strong> Claude UI can read your GitHub repos. But for writing (commits, PRs, file updates), you need Claude Code / CLI. UI is texting; CLI is pair programming.</p></div>
+  <div class="n"><i>!</i><p><strong>Invest in docs, not prompts.</strong> 1.5 days of clear documentation &gt; 2 weeks of prompt trial-and-error. Structure your input so AI works on the first attempt.</p></div>
 </section>
 
 <!-- ── AVOID ── -->
