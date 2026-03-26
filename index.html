@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Code — The Agent Playbook</title>
-<meta name="description" content="Living cheatsheet for Claude Code — session management, workflows, token efficiency, auto mode, setup. Updated daily by Nihaan Mohammed.">
+<meta name="description" content="Living cheatsheet for Claude Code — session management, workflows, token efficiency, auto mode, scheduling, setup. Updated daily by Nihaan Mohammed.">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -187,19 +187,22 @@
   <div class="quip">"Any sufficiently optimized workflow is indistinguishable from laziness." &mdash; Corollary to Clarke's Third</div>
 </header>
 
-<div class="timestamp">Last updated: 26 Mar 2026, 1:07 AM IST</div>
+<div class="timestamp">Last updated: 26 Mar 2026, 7:15 AM IST</div>
 
 <!-- ══ HOW TO USE ══ -->
 <div style="font-size:11.5px;color:var(--text-light);margin-bottom:24px;line-height:1.6;">
-  <strong style="color:var(--text-mid)">Use this page as your AI's daily reference.</strong> Add to your CLAUDE.md: <code style="font-size:10.5px">Read https://prody-dris.github.io/claude-code-cheatsheet/ and apply these practices.</code> Updated daily — your agent gets curated patterns instead of burning tokens scraping the internet.
+  <strong style="color:var(--text-mid)">Use this page as your AI's daily reference.</strong> Add to your CLAUDE.md: <code style="font-size:10.5px">Read https://prody-dris.github.io/claude-code-cheatsheet/ and apply these practices.</code> Updated daily &mdash; your agent gets curated patterns instead of burning tokens scraping the internet.
 </div>
 
 <!-- ══ WHAT'S NEW ══ -->
 <section>
   <h2>What's New <span class="badge">Latest</span></h2>
   <div class="callout">
-    <p><strong>Auto Mode</strong> (24 Mar 2026) &mdash; A classifier reviews each tool call before it runs. Safe actions proceed automatically, risky ones get blocked. The middle path between clicking "approve" 50 times and yolo-ing with skip-permissions. Enable via <code>Shift+Tab</code> or <code>--permission-mode auto</code>. Your safety hooks still run on top.</p>
+    <p><strong>Scheduled Tasks &amp; /loop</strong> (Mar 2026) &mdash; Recurring tasks in CLI. <code>/loop 5m check deploy</code> for interval-based, <code>CronCreate</code> for precise cron schedules. Pass <code>durable: true</code> to persist across sessions. Auto-expires after 7 days. Mac must be awake and Claude Code open for tasks to fire.</p>
   </div>
+  <div class="n"><i>+</i><p><strong>Code Review</strong> (24 Mar) &mdash; Agent team dispatched on every PR for deep review. The same system run on PRs at Anthropic. Research preview on Team/Enterprise.</p></div>
+  <div class="n"><i>+</i><p><strong>Auto Mode</strong> (24 Mar) &mdash; A classifier reviews each tool call before it runs. Safe actions proceed, risky ones get blocked. <code>Shift+Tab</code> cycles through: default &rarr; acceptEdits &rarr; plan &rarr; auto. Your safety hooks still run on top.</p></div>
+  <div class="n"><i>+</i><p><strong>Tool Search</strong> &mdash; MCP servers with 50+ tools no longer bloat context. Claude dynamically loads only the tools it needs via <code>ToolSearch</code>. Saves hundreds of tokens per call.</p></div>
 </section>
 
 <!-- ── SESSION ── -->
@@ -210,6 +213,8 @@
   <div class="r"><code>/rename</code><span>Name sessions like branches. Pick up later with <code>--resume</code>.</span></div>
   <div class="r"><code>Esc Esc</code><span>Rewind to any checkpoint. Restore code, conversation, or both.</span></div>
   <div class="r"><code>/effort</code><span><code>medium</code> for routine. <code>high</code> for deep work.</span></div>
+  <div class="r"><code>/loop</code><span>Recurring tasks: <code>/loop 30m check PRs</code>. Session-scoped by default.</span></div>
+  <div class="r"><code>/config</code><span>Set output style: Explanatory, Concise, or Technical. Custom styles in <code>~/.claude/output-styles/</code>.</span></div>
 </section>
 
 <!-- ── WORKFLOW ── -->
@@ -218,9 +223,19 @@
   <div class="n"><i>1</i><p><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run".</p></div>
   <div class="n"><i>2</i><p><strong>Interview before building.</strong> Have Claude ask you the hard questions first. Then spec in a fresh session.</p></div>
   <div class="n"><i>3</i><p><strong>Writer/Reviewer split.</strong> One session writes. A fresh one reviews. No self-bias.</p></div>
-  <div class="n"><i>4</i><p><strong>Give verification.</strong> Tests, screenshots, expected output. Highest-leverage habit you can build.</p></div>
-  <div class="n"><i>5</i><p><strong>Explore > Plan > Implement > Commit.</strong> Plan Mode for unknowns. Skip for trivial fixes.</p></div>
+  <div class="n"><i>4</i><p><strong>Give verification.</strong> Tests, screenshots, expected output. Install LSP plugins &mdash; they give Claude automatic diagnostics after every edit. Highest-impact plugin you can install.</p></div>
+  <div class="n"><i>5</i><p><strong>Explore &gt; Plan &gt; Implement &gt; Commit.</strong> Plan Mode (<code>Shift+Tab</code>) for unknowns. Skip for trivial fixes.</p></div>
   <div class="n"><i>6</i><p><strong>Two corrections max.</strong> Third fail = <code>/clear</code> and rewrite. Don't Goodhart your prompts &mdash; optimize for clarity, not length.</p></div>
+</section>
+
+<!-- ── SCHEDULING ── -->
+<section>
+  <h2>Scheduling <small>&mdash; delegate the recurring to the machine</small></h2>
+  <div class="n"><i>~</i><p><strong>/loop for intervals.</strong> <code>/loop 5m /babysit-prs</code>, <code>/loop 1h check deploy</code>. Defaults to 10m if no interval given. Session-scoped &mdash; dies when you exit.</p></div>
+  <div class="n"><i>~</i><p><strong>CronCreate for precision.</strong> Standard 5-field cron in local time. <code>"0 9 * * 1-5"</code> = weekdays at 9am. Pass <code>durable: true</code> to survive restarts.</p></div>
+  <div class="n"><i>~</i><p><strong>One-shot reminders.</strong> <code>recurring: false</code> &mdash; fires once, then auto-deletes. Pin minute/hour/day to specific values.</p></div>
+  <div class="n"><i>~</i><p><strong>7-day auto-expiry.</strong> Recurring tasks self-destruct after 7 days. Bounds runaway loops. Durable tasks persist to <code>.claude/scheduled_tasks.json</code>.</p></div>
+  <div class="n"><i>~</i><p><strong>Desktop /schedule.</strong> GUI-based in Claude Desktop / Cowork. Persists without machine being awake (cloud-backed on paid plans).</p></div>
 </section>
 
 <!-- ── TOKENS ── -->
@@ -235,7 +250,7 @@
     <div>
       <div class="n"><i>$</i><p><strong>Subagents for research.</strong> Separate context. Summary back.</p></div>
       <div class="n"><i>$</i><p><strong>Scope narrowly.</strong> "Check src/auth/" not "investigate".</p></div>
-      <div class="n"><i>$</i><p><strong>No redundant reads.</strong> Already read? Skip unless edited.</p></div>
+      <div class="n"><i>$</i><p><strong>Skills over MCPs.</strong> Transparent, reviewable, no black boxes. Hundreds in active use at Anthropic.</p></div>
     </div>
   </div>
 </section>
