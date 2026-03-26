@@ -187,7 +187,7 @@
   <div class="quip">"Any sufficiently optimized workflow is indistinguishable from laziness." &mdash; Corollary to Clarke's Third</div>
 </header>
 
-<div class="timestamp">Last updated: 26 Mar 2026, 7:15 AM IST</div>
+<div class="timestamp">Last updated: 26 Mar 2026, 11:00 PM IST</div>
 
 <!-- ══ HOW TO USE ══ -->
 <div style="font-size:11.5px;color:var(--text-light);margin-bottom:24px;line-height:1.6;">
@@ -200,6 +200,7 @@
   <div class="callout">
     <p><strong>Scheduled Tasks &amp; /loop</strong> (Mar 2026) &mdash; Recurring tasks in CLI. <code>/loop 5m check deploy</code> for interval-based, <code>CronCreate</code> for precise cron schedules. Pass <code>durable: true</code> to persist across sessions. Auto-expires after 7 days. Mac must be awake and Claude Code open for tasks to fire.</p>
   </div>
+  <div class="n"><i>+</i><p><strong>Knowledge Architecture</strong> (26 Mar) &mdash; Structure project repos with <code>.context/</code> folder: CLAUDE.md (identity), heartbeat.md (in-progress), MEMORY.md (index), decisions.md (reasoning), SECURITY.md (guardrails). AI never starts from scratch.</p></div>
   <div class="n"><i>+</i><p><strong>Code Review</strong> (24 Mar) &mdash; Agent team dispatched on every PR for deep review. The same system run on PRs at Anthropic. Research preview on Team/Enterprise.</p></div>
   <div class="n"><i>+</i><p><strong>Auto Mode</strong> (24 Mar) &mdash; A classifier reviews each tool call before it runs. Safe actions proceed, risky ones get blocked. <code>Shift+Tab</code> cycles through: default &rarr; acceptEdits &rarr; plan &rarr; auto. Your safety hooks still run on top.</p></div>
   <div class="n"><i>+</i><p><strong>Tool Search</strong> &mdash; MCP servers with 50+ tools no longer bloat context. Claude dynamically loads only the tools it needs via <code>ToolSearch</code>. Saves hundreds of tokens per call.</p></div>
@@ -270,6 +271,29 @@
       <div class="n"><i>*</i><p><strong>Push CLAUDE.md to git.</strong> Shared context compounds over time.</p></div>
     </div>
   </div>
+</section>
+
+<!-- ── KNOWLEDGE ARCHITECTURE ── -->
+<section>
+  <h2>Knowledge Architecture <span class="badge">New</span></h2>
+  <div class="callout">
+    <p><strong>The .context folder pattern.</strong> Every project repo gets a <code>.context/</code> directory. This is how AI remembers across sessions. Structure it once, benefit forever.</p>
+  </div>
+  <div class="n"><i>1</i><p><strong>CLAUDE.md</strong> &mdash; Identity &amp; instructions. Who you are, tech stack, communication style, who you serve. The onboarding doc AI reads in 2 seconds.</p></div>
+  <div class="n"><i>2</i><p><strong>heartbeat.md</strong> &mdash; What's in progress <em>right now</em>. Active deployments, current sprint, blockers. Update every session. AI picks up where you left off.</p></div>
+  <div class="n"><i>3</i><p><strong>MEMORY.md</strong> &mdash; Index of persistent learnings. Each memory is a separate <code>.md</code> file in <code>memories/</code>. Append-only &mdash; mark superseded, never delete.</p></div>
+  <div class="n"><i>4</i><p><strong>decisions.md</strong> &mdash; The "why" behind choices. Why approach A over B. Data fixtures are single source of truth. Future-you will thank you.</p></div>
+  <div class="n"><i>5</i><p><strong>SECURITY.md</strong> &mdash; Non-negotiable guardrails. No secrets in code, parameterised queries, permissions on every DocType, AI-generated code checks. Goes in <em>every</em> repo.</p></div>
+  <div class="n"><i>6</i><p><strong>glossary.md</strong> &mdash; Domain-specific vocabulary. What "UC" means, what "disbursement" means in your context. Prevents AI from guessing wrong.</p></div>
+</section>
+
+<!-- ── CONTEXT BLOAT ── -->
+<section>
+  <h2>Context Bloat <small>&mdash; AI burnout is real</small></h2>
+  <div class="n"><i>!</i><p><strong>Long threads = worse output.</strong> Token cost rises, hallucinations creep in. Same task, different quality at conversation start vs end. Like giving work at 9 AM vs 6 PM.</p></div>
+  <div class="n"><i>!</i><p><strong>Close, don't continue.</strong> When a conversation gets long, close it. Start fresh. Update CLAUDE.md with learnings. 2 minutes of updates saves 20 minutes of re-explaining.</p></div>
+  <div class="n"><i>!</i><p><strong>UI reads, CLI writes.</strong> Claude UI can read your GitHub repos via token. But for writing (commits, PRs, file updates), you need Claude Code / CLI. UI is texting; CLI is pair programming.</p></div>
+  <div class="n"><i>!</i><p><strong>Invest in docs, not prompts.</strong> 1.5 days of clear documentation > 2 weeks of prompt trial-and-error. Structure your input so AI works on the first attempt.</p></div>
 </section>
 
 <!-- ── AVOID ── -->
