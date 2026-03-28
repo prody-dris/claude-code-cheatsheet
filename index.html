@@ -43,7 +43,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── Dhurrie carpet borders ── */
+  /* -- Dhurrie carpet borders -- */
   body::before, body::after {
     content: '';
     position: fixed;
@@ -72,7 +72,7 @@
 
   .page { max-width: 640px; margin: 0 auto; padding: 44px 24px 48px; }
 
-  /* ── Header ── */
+  /* -- Header -- */
   header { margin-bottom: 28px; }
   header h1 {
     font-size: 22px; font-weight: 700; letter-spacing: -0.4px;
@@ -93,7 +93,7 @@
     border: none; border-radius: 1px;
   }
 
-  /* ── Timestamp ── */
+  /* -- Timestamp -- */
   .timestamp {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
@@ -107,14 +107,14 @@
     border: 1px solid rgba(166, 136, 10, 0.08);
   }
 
-  /* ── How to use hint ── */
+  /* -- How to use hint -- */
   .hint {
     font-size: 11.5px; color: var(--text-light);
     margin-bottom: 28px; line-height: 1.65;
   }
   .hint strong { color: var(--text-mid); font-weight: 600; }
 
-  /* ── Section card ── */
+  /* -- Section card -- */
   section {
     background: var(--bg-card);
     border: 1px solid var(--rule);
@@ -146,7 +146,7 @@
     margin-left: 2px;
   }
 
-  /* ── Rows (command → description) ── */
+  /* -- Rows (command -> description) -- */
   .r {
     display: flex; align-items: baseline;
     gap: 14px; padding: 7px 0;
@@ -164,7 +164,7 @@
   .r code:first-child { min-width: 115px; text-align: center; flex-shrink: 0; }
   .r span { color: var(--text-mid); font-size: 13.5px; }
 
-  /* ── Numbered / icon list items ── */
+  /* -- Numbered / icon list items -- */
   .n {
     display: flex; gap: 12px;
     padding: 7px 0;
@@ -186,10 +186,10 @@
   .n p { color: var(--text-mid); font-size: 13.5px; line-height: 1.65; }
   .n p strong { color: var(--text); font-weight: 600; }
 
-  /* ── Columns ── */
+  /* -- Columns -- */
   .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
 
-  /* ── Callout ── */
+  /* -- Callout -- */
   .callout {
     background: var(--gold-bg);
     border-left: 3px solid var(--gold);
@@ -200,14 +200,14 @@
   .callout p { font-size: 13px; color: var(--text-mid); line-height: 1.65; }
   .callout strong { color: var(--text); }
 
-  /* ── Divider between section groups ── */
+  /* -- Divider between section groups -- */
   .divider {
     border: none; height: 1px;
     background: linear-gradient(90deg, transparent, var(--rule), transparent);
     margin: 8px 0;
   }
 
-  /* ── Footer ── */
+  /* -- Footer -- */
   footer {
     margin-top: 24px; padding: 14px 0 0;
     border-top: 1px solid var(--rule);
@@ -222,7 +222,7 @@
   footer a:hover { color: var(--gold); }
   footer small { font-size: 10.5px; color: var(--text-light); }
 
-  /* ── Print ── */
+  /* -- Print -- */
   @media print {
     body::before, body::after { display: none; }
     section { box-shadow: none; break-inside: avoid; border: 1px solid #ddd; }
@@ -248,24 +248,37 @@
   <hr class="header-rule">
 </header>
 
-<div class="timestamp">Last updated: 27 Mar 2026, 1:00 AM IST</div>
+<div class="timestamp">Last updated: 28 Mar 2026, 9:45 PM IST</div>
 
 <div class="hint">
-  <strong>Use this page as your AI's daily reference.</strong> Add to your CLAUDE.md: <code style="font-size:10.5px">Read https://prody-dris.github.io/claude-code-cheatsheet/ and apply these practices.</code> Updated daily &mdash; your agent gets curated patterns instead of burning tokens scraping the internet.
+  <strong>Use this page as your AI's daily reference.</strong> Add to your CLAUDE.md: <code style="font-size:10.5px">Read https://prody-dris.github.io/claude-code-cheatsheet/ and apply these practices.</code> Updated regularly &mdash; your agent gets curated patterns instead of burning tokens scraping the internet.
 </div>
 
-<!-- ══ WHAT'S NEW ══ -->
+<!-- == WHAT'S NEW == -->
 <section>
   <h2>What's New <span class="badge">Latest</span></h2>
   <div class="callout">
-    <p><strong>Computer Use &amp; Remote Control</strong> (Mar 24) &mdash; Claude Code can now operate your desktop: open files, control browsers, run dev tools. <code>/remote-control</code> bridges to claude.ai/code &mdash; message your Mac from your phone and have it execute tasks while you're away.</p>
+    <p><strong>Channels</strong> (Mar 19) &mdash; Message your Claude Code session from Telegram or Discord via <code>/remote-control</code>. Text your Mac from your phone, have it execute tasks while you're away. More platforms coming.</p>
   </div>
-  <div class="n"><i>+</i><p><strong>Voice Mode</strong> (Mar 24) &mdash; Hold spacebar to talk. 30 languages. Dictate specs, describe bugs, brainstorm hands-free. Push-to-talk, not always-on.</p></div>
-  <div class="n"><i>+</i><p><strong>Opus 4.6 + 1M Context</strong> &mdash; New default model. 1M token context window on Max/Team/Enterprise. <code>/fast</code> toggles faster output, same model. Output cap raised to 64K tokens (128K max).</p></div>
-  <div class="n"><i>+</i><p><strong>Agent Teams</strong> &mdash; Multiple agents collaborate on a task. <code>TeammateIdle</code> and <code>TaskCompleted</code> hook events coordinate handoffs. Code Review on every PR &mdash; same system Anthropic runs internally.</p></div>
+  <div class="n"><i>+</i><p><strong>Claude Code SDK</strong> &mdash; Build custom agents on top of Claude Code. Thariq is open-sourcing a local email agent as a reference. If you're building agents, start here instead of raw API.</p></div>
+  <div class="n"><i>+</i><p><strong>Sonnet 4.6</strong> &mdash; New balanced model. Better agentic search, fewer tokens. Use for shell fixes, quick tasks. Opus 4.6 remains default for deep work.</p></div>
+  <div class="n"><i>+</i><p><strong>Plugin System</strong> &mdash; Extend Claude Code with community plugins: custom commands, agents, hooks, MCP servers. Browse via <code>/plugins</code>.</p></div>
+  <div class="n"><i>+</i><p><strong>Compaction API (beta)</strong> &mdash; Server-side context summarization. Effectively infinite conversations. Fixes the old problem of degrading output in long threads.</p></div>
+  <div class="n"><i>+</i><p><strong>Elicitation Hooks</strong> &mdash; Intercept and override Claude's responses before they're sent back. New hook type for advanced workflows.</p></div>
 </section>
 
-<!-- ── SESSION ── -->
+<!-- Previous wave (still recent) -->
+<section>
+  <h2>Recent <small>&mdash; still worth knowing</small></h2>
+  <div class="n"><i>&bull;</i><p><strong>Auto Mode</strong> (Mar 24) &mdash; Claude handles permission decisions with safeguards. Fewer interruptions for trusted execution. Team plan now, Enterprise soon.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Computer Use</strong> (Mar 24) &mdash; Claude can operate your desktop: open files, control browsers, run dev tools. Pro and Max plans.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Voice Mode</strong> (Mar 24) &mdash; Hold spacebar to talk. 30 languages. Dictate specs, describe bugs, brainstorm hands-free.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Opus 4.6 + 1M Context</strong> &mdash; GA on all paid plans. Output cap: 64K tokens (128K max). <code>/fast</code> toggles faster output, same model.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Agent Teams</strong> &mdash; Multi-agent collaboration. <code>TeammateIdle</code> and <code>TaskCompleted</code> hooks coordinate handoffs. Experimental: set <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1</code>.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Sparse Worktrees</strong> &mdash; <code>worktree.sparsePaths</code> setting for large monorepos. Check out only the directories you need.</p></div>
+</section>
+
+<!-- -- SESSION -- -->
 <section>
   <h2>Session</h2>
   <div class="r"><code>/clear</code><span>Between unrelated tasks. Clean reset &gt; lossy summary.</span></div>
@@ -276,9 +289,10 @@
   <div class="r"><code>Esc Esc</code><span>Rewind to any checkpoint. Restore code, conversation, or both.</span></div>
   <div class="r"><code>/rename</code><span>Name sessions like branches. Resume later with <code>--resume</code>.</span></div>
   <div class="r"><code>/loop</code><span>Recurring tasks: <code>/loop 30m check PRs</code>. Session-scoped by default.</span></div>
+  <div class="r"><code>-n</code><span>CLI flag: <code>claude -n "my-session"</code> sets display name at startup.</span></div>
 </section>
 
-<!-- ── WORKFLOW ── -->
+<!-- -- WORKFLOW -- -->
 <section>
   <h2>Workflow</h2>
   <div class="n"><i>1</i><p><strong>State work type upfront.</strong> "Quick question" / "feature spec" / "code session" / "QA run". Sets expectations both ways.</p></div>
@@ -289,17 +303,28 @@
   <div class="n"><i>6</i><p><strong>Two corrections max.</strong> Third fail = <code>/clear</code> and rewrite the prompt. Don't Goodhart &mdash; optimize for clarity, not length.</p></div>
 </section>
 
-<!-- ── SCHEDULING ── -->
+<!-- -- DAILY RITUALS -- -->
 <section>
-  <h2>Scheduling <small>&mdash; delegate the recurring to the machine</small></h2>
-  <div class="n"><i>~</i><p><strong>/loop for intervals.</strong> <code>/loop 5m /babysit-prs</code>, <code>/loop 1h check deploy</code>. Defaults to 10m if no interval given. Session-scoped &mdash; dies when you exit.</p></div>
-  <div class="n"><i>~</i><p><strong>CronCreate for precision.</strong> Standard 5-field cron in local time. <code>"0 9 * * 1-5"</code> = weekdays at 9am. Pass <code>durable: true</code> to survive restarts.</p></div>
-  <div class="n"><i>~</i><p><strong>One-shot reminders.</strong> <code>recurring: false</code> &mdash; fires once, then auto-deletes. Pin minute/hour/day to specific values.</p></div>
-  <div class="n"><i>~</i><p><strong>7-day auto-expiry.</strong> Recurring tasks self-destruct after 7 days. Bounds runaway loops. Durable tasks persist to <code>.claude/scheduled_tasks.json</code>.</p></div>
-  <div class="n"><i>~</i><p><strong>Desktop /schedule.</strong> GUI-based in Claude Desktop / Cowork. Persists without machine being awake (cloud-backed on paid plans).</p></div>
+  <h2>Daily Rituals <small>&mdash; structure that compounds</small></h2>
+  <div class="n"><i>AM</i><p><strong>Morning alignment.</strong> Pull yesterday's wins, open reminders, Linear issues, GitHub PRs. Energy check (sharp/steady/recovering). Generate 1-3-5 plan with a protected thinking block. Push to Reminders.</p></div>
+  <div class="n"><i>PM</i><p><strong>Evening review.</strong> Lead with wins, not scores. Honest reflection: what shipped, what's blocked, which products got attention. Process carry-overs (winding down vs night session). Prep tomorrow's draft.</p></div>
+  <div class="n"><i>FR</i><p><strong>Friday pulse.</strong> 5-line week retro: product attention days, top 3 shipped items, bounced-all-week items, Monday leverage candidate. Prevents Monday blindness.</p></div>
+  <div class="callout">
+    <p><strong>The leverage question:</strong> What's the one thing today that, if done, makes everything else easier or irrelevant? That gets the deep block. Everything else fits around it.</p>
+  </div>
 </section>
 
-<!-- ── TOKENS ── -->
+<!-- -- SCHEDULING -- -->
+<section>
+  <h2>Scheduling <small>&mdash; delegate the recurring to the machine</small></h2>
+  <div class="n"><i>~</i><p><strong>/loop for intervals.</strong> <code>/loop 5m /babysit-prs</code>, <code>/loop 1h check deploy</code>. Defaults to 10m. Session-scoped &mdash; dies when you exit.</p></div>
+  <div class="n"><i>~</i><p><strong>CronCreate for precision.</strong> Standard 5-field cron in local time. <code>"0 9 * * 1-5"</code> = weekdays at 9am. Pass <code>durable: true</code> to survive restarts.</p></div>
+  <div class="n"><i>~</i><p><strong>One-shot reminders.</strong> <code>recurring: false</code> &mdash; fires once, then auto-deletes.</p></div>
+  <div class="n"><i>~</i><p><strong>7-day auto-expiry.</strong> Recurring tasks self-destruct after 7 days. Durable tasks persist to <code>.claude/scheduled_tasks.json</code>.</p></div>
+  <div class="n"><i>~</i><p><strong>Dreaming: off by default.</strong> <code>autoDreamEnabled: false</code> in settings.json. Enable only if you have a specific idle-time use case. Tokens burn continuously otherwise.</p></div>
+</section>
+
+<!-- -- TOKENS -- -->
 <section>
   <h2>Tokens <small>&mdash; every wasted token is a thought that never happened</small></h2>
   <div class="cols">
@@ -316,7 +341,7 @@
   </div>
 </section>
 
-<!-- ── SETUP ── -->
+<!-- -- SETUP -- -->
 <section>
   <h2>Setup <small>&mdash; your config is your prior</small></h2>
   <div class="cols">
@@ -333,30 +358,29 @@
   </div>
 </section>
 
-<!-- ── KNOWLEDGE ARCHITECTURE ── -->
+<!-- -- KNOWLEDGE ARCHITECTURE -- -->
 <section>
   <h2>Knowledge Architecture</h2>
   <div class="callout">
-    <p><strong>The .context folder pattern.</strong> Every project repo gets a <code>.context/</code> directory. This is how AI remembers across sessions. Structure it once, benefit forever.</p>
+    <p><strong>Two domains, one rule.</strong> <code>~/Documents/Projects/</code> is yours &mdash; structured docs, specs, reports. <code>~/Workspaces/</code> is the agent's &mdash; dev work, worktrees, tooling. Neither pollutes the other.</p>
   </div>
-  <div class="n"><i>1</i><p><strong>CLAUDE.md</strong> &mdash; Identity &amp; instructions. Who you are, tech stack, communication style, who you serve. The onboarding doc AI reads in 2 seconds.</p></div>
-  <div class="n"><i>2</i><p><strong>heartbeat.md</strong> &mdash; What's in progress <em>right now</em>. Active deployments, current sprint, blockers. Update every session. AI picks up where you left off.</p></div>
-  <div class="n"><i>3</i><p><strong>MEMORY.md</strong> &mdash; Index of persistent learnings. Each memory is a separate <code>.md</code> file. Append-only &mdash; mark superseded, never delete.</p></div>
+  <div class="n"><i>1</i><p><strong>CLAUDE.md</strong> &mdash; Identity &amp; instructions. Who you are, tech stack, communication style. The onboarding doc AI reads in 2 seconds.</p></div>
+  <div class="n"><i>2</i><p><strong>heartbeat.md</strong> &mdash; What's in progress <em>right now</em>. Active deployments, current sprint, blockers. Update every session.</p></div>
+  <div class="n"><i>3</i><p><strong>MEMORY.md</strong> &mdash; Index of persistent learnings. Each memory is a separate <code>.md</code> file. Cap at 15, merge aggressively.</p></div>
   <div class="n"><i>4</i><p><strong>decisions.md</strong> &mdash; The "why" behind choices. Why approach A over B. Future-you will thank you.</p></div>
-  <div class="n"><i>5</i><p><strong>SECURITY.md</strong> &mdash; Non-negotiable guardrails. No secrets in code, parameterised queries, permissions on every DocType. Goes in <em>every</em> repo.</p></div>
-  <div class="n"><i>6</i><p><strong>glossary.md</strong> &mdash; Domain-specific vocabulary. Prevents AI from guessing wrong.</p></div>
+  <div class="n"><i>5</i><p><strong>Project folder convention</strong> &mdash; Every project: <code>docs/</code> (deliverables), <code>context/</code> (inputs), <code>data/</code> (exports), <code>media/</code> (videos, images). Known structure = direct lookup, not search.</p></div>
 </section>
 
-<!-- ── CONTEXT BLOAT ── -->
+<!-- -- CONTEXT BLOAT -- -->
 <section>
   <h2>Context Bloat <small>&mdash; AI burnout is real</small></h2>
-  <div class="n"><i>!</i><p><strong>Long threads = worse output.</strong> Token cost rises, hallucinations creep in. Same task, different quality at conversation start vs end.</p></div>
-  <div class="n"><i>!</i><p><strong>Close, don't continue.</strong> When a conversation gets long, close it. Start fresh. Update CLAUDE.md with learnings. 2 minutes of updates saves 20 minutes of re-explaining.</p></div>
-  <div class="n"><i>!</i><p><strong>UI reads, CLI writes.</strong> Claude UI can read your GitHub repos. But for writing (commits, PRs, file updates), you need Claude Code / CLI. UI is texting; CLI is pair programming.</p></div>
-  <div class="n"><i>!</i><p><strong>Invest in docs, not prompts.</strong> 1.5 days of clear documentation &gt; 2 weeks of prompt trial-and-error. Structure your input so AI works on the first attempt.</p></div>
+  <div class="n"><i>!</i><p><strong>Long threads = worse output.</strong> Token cost rises, hallucinations creep in. Compaction API helps but doesn't eliminate this.</p></div>
+  <div class="n"><i>!</i><p><strong>Close, don't continue.</strong> When a conversation gets long, close it. Start fresh. Update CLAUDE.md with learnings.</p></div>
+  <div class="n"><i>!</i><p><strong>"Summarize from here"</strong> &mdash; New: partial conversation summarization. Trim the fat without starting over.</p></div>
+  <div class="n"><i>!</i><p><strong>Invest in docs, not prompts.</strong> 1.5 days of clear documentation &gt; 2 weeks of prompt trial-and-error.</p></div>
 </section>
 
-<!-- ── AVOID ── -->
+<!-- -- AVOID -- -->
 <section>
   <h2>Avoid <small>&mdash; coordination failures start small</small></h2>
   <div class="n"><i class="x">X</i><p><strong>Kitchen sink sessions.</strong> One task drifts into three. <code>/clear</code> between.</p></div>
@@ -364,6 +388,7 @@
   <div class="n"><i class="x">X</i><p><strong>Bloated CLAUDE.md.</strong> Over 5KB and rules get lost. Move knowledge to skills.</p></div>
   <div class="n"><i class="x">X</i><p><strong>Unscoped exploration.</strong> "Investigate everything" fills context. Scope or subagents.</p></div>
   <div class="n"><i class="x">X</i><p><strong>Ship without verification.</strong> Plausible != correct. No tests, no confidence.</p></div>
+  <div class="n"><i class="x">X</i><p><strong>Dreaming without purpose.</strong> Auto-dream burns tokens continuously. Disable unless you have a specific polling use case.</p></div>
 </section>
 
 <footer>
