@@ -258,24 +258,24 @@
 <section>
   <h2>What's New <span class="badge">Latest</span></h2>
   <div class="callout">
-    <p><strong>Channels</strong> (Mar 19) &mdash; Message your Claude Code session from Telegram or Discord via <code>/remote-control</code>. Text your Mac from your phone, have it execute tasks while you're away. More platforms coming.</p>
+    <p><strong>Channels</strong> (Mar 19) &mdash; <code>--channels</code> flag (research preview) lets MCP servers push messages into your session. Enables remote interaction via channel plugins. Admins control access with <code>allowedChannelPlugins</code> managed setting.</p>
   </div>
-  <div class="n"><i>+</i><p><strong>Claude Code SDK</strong> &mdash; Build custom agents on top of Claude Code. Thariq is open-sourcing a local email agent as a reference. If you're building agents, start here instead of raw API.</p></div>
+  <div class="n"><i>+</i><p><strong>/remote-control</strong> (VS Code only, Mar 18) &mdash; Bridges your VS Code session to claude.ai/code so you can continue from a browser or phone. Separate from <code>--channels</code>.</p></div>
   <div class="n"><i>+</i><p><strong>Sonnet 4.6</strong> &mdash; New balanced model. Better agentic search, fewer tokens. Use for shell fixes, quick tasks. Opus 4.6 remains default for deep work.</p></div>
-  <div class="n"><i>+</i><p><strong>Plugin System</strong> &mdash; Extend Claude Code with community plugins: custom commands, agents, hooks, MCP servers. Browse via <code>/plugins</code>.</p></div>
-  <div class="n"><i>+</i><p><strong>Compaction API (beta)</strong> &mdash; Server-side context summarization. Effectively infinite conversations. Fixes the old problem of degrading output in long threads.</p></div>
-  <div class="n"><i>+</i><p><strong>Elicitation Hooks</strong> &mdash; Intercept and override Claude's responses before they're sent back. New hook type for advanced workflows.</p></div>
+  <div class="n"><i>+</i><p><strong>Plugin System</strong> &mdash; Extend Claude Code with community plugins: custom commands, agents, hooks, MCP servers. Browse via <code>/plugin</code>. Code intelligence plugins give Claude LSP-level diagnostics.</p></div>
+  <div class="n"><i>+</i><p><strong>Compaction API (beta)</strong> &mdash; Server-side context summarization. Also: "Summarize from here" via <code>Esc Esc</code> lets you partially compact without starting over.</p></div>
+  <div class="n"><i>+</i><p><strong>MCP Elicitation</strong> (Mar 14) &mdash; MCP servers can request structured input mid-task via interactive dialogs. New <code>Elicitation</code> and <code>ElicitationResult</code> hooks to intercept and override.</p></div>
 </section>
 
 <!-- Previous wave (still recent) -->
 <section>
   <h2>Recent <small>&mdash; still worth knowing</small></h2>
-  <div class="n"><i>&bull;</i><p><strong>Auto Mode</strong> (Mar 24) &mdash; Claude handles permission decisions with safeguards. Fewer interruptions for trusted execution. Team plan now, Enterprise soon.</p></div>
-  <div class="n"><i>&bull;</i><p><strong>Computer Use</strong> (Mar 24) &mdash; Claude can operate your desktop: open files, control browsers, run dev tools. Pro and Max plans.</p></div>
-  <div class="n"><i>&bull;</i><p><strong>Voice Mode</strong> (Mar 24) &mdash; Hold spacebar to talk. 30 languages. Dictate specs, describe bugs, brainstorm hands-free.</p></div>
-  <div class="n"><i>&bull;</i><p><strong>Opus 4.6 + 1M Context</strong> &mdash; GA on all paid plans. Output cap: 64K tokens (128K max). <code>/fast</code> toggles faster output, same model.</p></div>
-  <div class="n"><i>&bull;</i><p><strong>Agent Teams</strong> &mdash; Multi-agent collaboration. <code>TeammateIdle</code> and <code>TaskCompleted</code> hooks coordinate handoffs. Experimental: set <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1</code>.</p></div>
-  <div class="n"><i>&bull;</i><p><strong>Sparse Worktrees</strong> &mdash; <code>worktree.sparsePaths</code> setting for large monorepos. Check out only the directories you need.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Auto Mode</strong> (Mar 24) &mdash; Classifier model handles permission decisions with safety guardrails. Blocks destructive actions, lets routine work proceed. Team plan now. Enable: <code>claude --enable-auto-mode</code> or <code>Shift+Tab</code>.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Voice Mode</strong> &mdash; Push-to-talk (hold spacebar, rebindable via <code>voice:pushToTalk</code> in keybindings.json). Dictate specs, describe bugs, brainstorm hands-free.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Opus 4.6 + 1M Context</strong> (Mar 13) &mdash; 1M context GA on Max/Team/Enterprise. Output cap: 64K tokens default, 128K max. Opus defaults to medium effort. <code>/fast</code> toggles faster output, same model.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Sparse Worktrees</strong> (Mar 14) &mdash; <code>worktree.sparsePaths</code> setting for large monorepos. Check out only the directories you need via git sparse-checkout.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Transcript Search</strong> (Mar 25) &mdash; Press <code>/</code> in transcript mode (<code>Ctrl+O</code>) to search, <code>n</code>/<code>N</code> to step through matches.</p></div>
+  <div class="n"><i>&bull;</i><p><strong>Conditional Hooks</strong> (Mar 26) &mdash; <code>if</code> field for hooks uses permission rule syntax (e.g., <code>Bash(git *)</code>) to filter when they fire. Reduces process spawning overhead.</p></div>
 </section>
 
 <!-- -- SESSION -- -->
@@ -286,9 +286,9 @@
   <div class="r"><code>/fast</code><span>Toggle fast mode. Same Opus 4.6 model, faster output.</span></div>
   <div class="r"><code>/effort</code><span><code>low</code> <code>medium</code> <code>high</code>. Or <code>auto</code> &mdash; Claude picks per-turn.</span></div>
   <div class="r"><code>Shift+Tab</code><span>Cycle permission modes: default &rarr; acceptEdits &rarr; plan &rarr; auto.</span></div>
-  <div class="r"><code>Esc Esc</code><span>Rewind to any checkpoint. Restore code, conversation, or both.</span></div>
   <div class="r"><code>/rename</code><span>Name sessions like branches. Resume later with <code>--resume</code>.</span></div>
-  <div class="r"><code>/loop</code><span>Recurring tasks: <code>/loop 30m check PRs</code>. Session-scoped by default.</span></div>
+  <div class="r"><code>/loop</code><span>Recurring tasks: <code>/loop 5m check deploy</code>. Session-scoped, dies on exit.</span></div>
+  <div class="r"><code>/rewind</code><span>Or <code>Esc Esc</code>. Restore code, conversation, or both. "Summarize from here" trims context.</span></div>
   <div class="r"><code>-n</code><span>CLI flag: <code>claude -n "my-session"</code> sets display name at startup.</span></div>
 </section>
 
