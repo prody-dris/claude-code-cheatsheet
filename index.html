@@ -433,11 +433,21 @@
       <h2>What's New <span class="small">— Claude Code, source-verified</span></h2>
       <p class="lede">Only entries with a citation. Pulled from the official <a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md">Claude Code CHANGELOG</a> and <a href="https://code.claude.com/docs/en/commands">commands reference</a>.</p>
 
-      <div class="n"><i>NEW</i><p><strong><code>/team-onboarding</code></strong> — generates a teammate ramp-up guide from your local Claude Code usage. Ship this to anyone joining the codebase. <span class="src"><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md">v2.1.101</a></span></p></div>
+      <div class="n"><i>NEW</i><p><strong>Opus 4.7 lands with new <code>xhigh</code> effort tier</strong> — Claude Opus 4.7 is live in Claude Code. The new <code>xhigh</code> effort level sits between <code>high</code> and <code>max</code>, available for Opus 4.7 via <code>/effort</code>, <code>--effort</code>, or the model picker. Other models fall back to <code>high</code>. <span class="src">v2.1.111</span></p></div>
 
-      <div class="n"><i>NEW</i><p><strong>Enterprise TLS trust by default</strong> — Claude Code now trusts the OS certificate store automatically, so corporate proxies work without extra setup. Set <code>CLAUDE_CODE_CERT_STORE=bundled</code> to opt out. <span class="src">v2.1.101</span></p></div>
+      <div class="n"><i>NEW</i><p><strong><code>/ultrareview</code></strong> — comprehensive code review in the cloud using parallel multi-agent analysis and critique. Invoke with no arguments to review your current branch, or <code>/ultrareview &lt;PR#&gt;</code> to fetch and review a GitHub PR. <span class="src">v2.1.111 · <a href="https://code.claude.com/docs/en/commands">commands</a></span></p></div>
 
-      <div class="n"><i>NEW</i><p><strong><code>/ultraplan</code> auto-provisions a cloud environment</strong> — no web setup required before first use. Draft a plan in an Ultraplan session, review in your browser, execute remotely or push back to your terminal. <span class="src">v2.1.101 · <a href="https://code.claude.com/docs/en/commands">commands</a></span></p></div>
+      <div class="n"><i>NEW</i><p><strong>Auto mode reaches Max on Opus 4.7</strong> — auto mode is now available to Max subscribers when using Opus 4.7, and no longer requires the <code>--enable-auto-mode</code> flag. <span class="src">v2.1.111 · hotfix in v2.1.112</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong><code>/less-permission-prompts</code> skill</strong> — scans your transcripts for common read-only Bash and MCP tool calls and proposes a prioritized allowlist for <code>.claude/settings.json</code>. Cuts permission-prompt noise without blanket-allowing tools. <span class="src">v2.1.111</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong><code>/effort</code> interactive slider</strong> — calling <code>/effort</code> with no arguments now opens a slider. Arrow keys navigate between levels, Enter confirms. <span class="src">v2.1.111</span></p></div>
+
+      <div class="n"><i>+</i><p><strong><code>/team-onboarding</code></strong> — generates a teammate ramp-up guide from your local Claude Code usage. Ship this to anyone joining the codebase. <span class="src"><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md">v2.1.101</a></span></p></div>
+
+      <div class="n"><i>+</i><p><strong>Enterprise TLS trust by default</strong> — Claude Code now trusts the OS certificate store automatically, so corporate proxies work without extra setup. Set <code>CLAUDE_CODE_CERT_STORE=bundled</code> to opt out. <span class="src">v2.1.101</span></p></div>
+
+      <div class="n"><i>+</i><p><strong><code>/ultraplan</code> auto-provisions a cloud environment</strong> — no web setup required before first use. Draft a plan in an Ultraplan session, review in your browser, execute remotely or push back to your terminal. <span class="src">v2.1.101 · <a href="https://code.claude.com/docs/en/commands">commands</a></span></p></div>
 
       <div class="n"><i>+</i><p><strong><code>/powerup</code></strong> — interactive lessons teaching Claude Code features with animated demos. Best onboarding for existing users who haven't explored new capabilities. <span class="src">v2.1.90</span></p></div>
 
@@ -451,7 +461,7 @@
 
       <div class="n"><i>+</i><p><strong>MCP Elicitation</strong> — MCP servers can now request structured input mid-task via interactive dialogs (form fields or browser URL). New <code>Elicitation</code> and <code>ElicitationResult</code> hooks let you intercept and override responses. <span class="src">v2.1.76</span></p></div>
 
-      <div class="n"><i>+</i><p><strong><code>/effort low|medium|high|max|auto</code></strong> — set the model effort level. <code>max</code> is Opus-4.6 only and applies to the current session. <code>auto</code> resets to the model default. <span class="src">v2.1.76, default raised to <em>high</em> in v2.1.94</span></p></div>
+      <div class="n"><i>+</i><p><strong><code>/effort low|medium|high|xhigh|max|auto</code></strong> — set the model effort level. <code>xhigh</code> is Opus-4.7 only and sits between <code>high</code> and <code>max</code>. <code>max</code> is Opus-4.6 only. Both apply to the current session. <code>auto</code> resets to the model default. With no arguments, <code>/effort</code> opens an interactive slider. <span class="src">v2.1.76 · default raised to <em>high</em> in v2.1.94 · <code>xhigh</code> + slider in v2.1.111</span></p></div>
 
       <div class="n"><i>+</i><p><strong>1M context for Opus 4.6 by default</strong> on Max, Team, and Enterprise plans (previously required extra usage). Max output tokens: 64K default, 128K ceiling. <span class="src">v2.1.75 &amp; v2.1.77</span></p></div>
 
@@ -486,7 +496,7 @@
 
       <h3>Model &amp; effort</h3>
       <div class="r"><code>/model</code><span>Select or change the AI model. Left/right arrows adjust effort level for supported models.</span></div>
-      <div class="r"><code>/effort</code><span><code>low</code> · <code>medium</code> · <code>high</code> · <code>max</code> (Opus 4.6 only, session-scoped) · <code>auto</code> (model default).</span></div>
+      <div class="r"><code>/effort</code><span><code>low</code> · <code>medium</code> · <code>high</code> · <code>xhigh</code> (Opus 4.7 only, session-scoped) · <code>max</code> (Opus 4.6 only, session-scoped) · <code>auto</code> (model default). No args → interactive slider.</span></div>
       <div class="r"><code>/fast [on|off]</code><span>Toggle fast mode. Same model, faster output.</span></div>
 
       <h3>Plans &amp; agents</h3>
@@ -501,8 +511,10 @@
       <div class="r"><code>/loop [interval] [prompt]</code><span>Bundled skill. Run a prompt repeatedly while the session is open. Omit interval → self-paced. Omit prompt → runs <code>.claude/loop.md</code>.</span></div>
 
       <h3>Review, security, debug</h3>
+      <div class="r"><code>/ultrareview</code><span>Cloud-hosted parallel multi-agent review. No args → reviews current branch. <code>/ultrareview &lt;PR#&gt;</code> → fetches and reviews a GitHub PR. Flags design &amp; logic gaps, not just syntax. <span class="src">v2.1.111</span></span></div>
       <div class="r"><code>/security-review</code><span>Analyze the pending git diff for injection, auth issues, and data exposure.</span></div>
       <div class="r"><code>/autofix-pr</code><span>Spawn a web session that watches the PR and pushes fixes when CI fails or reviewers leave comments.</span></div>
+      <div class="r"><code>/less-permission-prompts</code><span>Bundled skill. Scans transcripts for common read-only Bash/MCP calls and proposes a prioritized allowlist for <code>.claude/settings.json</code>. <span class="src">v2.1.111</span></span></div>
       <div class="r"><code>/batch</code><span>Bundled skill. Decomposes work into 5–30 units, spawns background agents in isolated worktrees, each opens a PR.</span></div>
       <div class="r"><code>/simplify</code><span>Bundled skill. Spawns three review agents in parallel and fixes code-reuse, quality, and efficiency issues.</span></div>
       <div class="r"><code>/debug</code><span>Bundled skill. Enables debug logging mid-session and analyzes the log.</span></div>
