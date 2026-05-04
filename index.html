@@ -415,7 +415,7 @@
 
     <div class="topline">
       <div class="pill"><span class="dot"></span>Agent Workbench</div>
-      <div class="pill">Verified 2026-04-11</div>
+      <div class="pill">Verified 2026-05-04</div>
       <div class="pill">Claude Code · Codex · Cursor · Gemini CLI · Copilot CLI</div>
     </div>
 
@@ -433,7 +433,27 @@
       <h2>What's New <span class="small">— Claude Code, source-verified</span></h2>
       <p class="lede">Only entries with a citation. Pulled from the official <a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md">Claude Code CHANGELOG</a> and <a href="https://code.claude.com/docs/en/commands">commands reference</a>.</p>
 
-      <div class="n"><i>NEW</i><p><strong>Opus 4.7 lands with new <code>xhigh</code> effort tier</strong> — Claude Opus 4.7 is live in Claude Code. The new <code>xhigh</code> effort level sits between <code>high</code> and <code>max</code>, available for Opus 4.7 via <code>/effort</code>, <code>--effort</code>, or the model picker. Other models fall back to <code>high</code>. <span class="src">v2.1.111</span></p></div>
+      <div class="n"><i>NEW</i><p><strong><code>claude project purge [path]</code></strong> — wipes all Claude Code state for a project (transcripts, tasks, file history, config entry). Supports <code>--dry-run</code>, <code>-y</code>, <code>-i</code>, <code>--all</code>. Project hygiene without grepping <code>~/.claude</code>. <span class="src">v2.1.126</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong>Session recap</strong> — when you return to a session, Claude shows what happened while the terminal was unfocused. Configurable in <code>/config</code>; manually invoke with <code>/recap</code>. Force-on with <code>CLAUDE_CODE_ENABLE_AWAY_SUMMARY</code> when telemetry is disabled. <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong>Custom themes</strong> — build and ship color palettes from <code>/theme</code> or as a plugin. The plugin path means a team can publish one theme and everyone picks it up via <code>/plugin marketplace</code>. <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong><code>claude ultrareview [target]</code> CLI subcommand</strong> — run <code>/ultrareview</code> non-interactively from CI or scripts. Prints findings to stdout (<code>--json</code> for raw output), exits 0 on completion or 1 on failure. Pairs with the <code>/ultrareview</code> public preview. <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong>Windows: Git Bash no longer required</strong> — when Git for Windows is absent, Claude Code falls back to PowerShell as its shell tool. Cleaner Windows install. <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong><code>${CLAUDE_EFFORT}</code> in skill content</strong> — skills can now branch on the active effort level. Lighter procedure on <code>medium</code>, fuller protocol on <code>xhigh</code>, without two skill files. <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong><code>/skills</code> type-to-filter</strong> — long skill lists are searchable instead of scrollable. <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong>MCP <code>alwaysLoad</code></strong> — when <code>true</code>, all tools from a server bypass tool-search deferral and stay loaded. Use sparingly — defeats deferral's context savings. <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong><code>claude plugin prune</code></strong> — removes orphaned auto-installed plugin dependencies. <code>plugin uninstall --prune</code> cascades. <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>NEW</i><p><strong>OAuth code paste for headless auth</strong> — <code>claude auth login</code> now accepts the OAuth code pasted into the terminal when the browser callback can't reach localhost (WSL2, SSH, containers). <span class="src">May 2026 release</span></p></div>
+
+      <div class="n"><i>+</i><p><strong>Opus 4.7 lands with new <code>xhigh</code> effort tier</strong> — Claude Opus 4.7 is live in Claude Code. The new <code>xhigh</code> effort level sits between <code>high</code> and <code>max</code>, available for Opus 4.7 via <code>/effort</code>, <code>--effort</code>, or the model picker. Other models fall back to <code>high</code>. <span class="src">v2.1.111</span></p></div>
 
       <div class="n"><i>NEW</i><p><strong><code>/ultrareview</code></strong> — comprehensive code review in the cloud using parallel multi-agent analysis and critique. Invoke with no arguments to review your current branch, or <code>/ultrareview &lt;PR#&gt;</code> to fetch and review a GitHub PR. <span class="src">v2.1.111 · <a href="https://code.claude.com/docs/en/commands">commands</a></span></p></div>
 
@@ -487,6 +507,8 @@
       <h3>Context &amp; flow</h3>
       <div class="r"><code>/clear</code><span>Clear conversation, free context. Aliases: <code>/reset</code>, <code>/new</code>.</span></div>
       <div class="r"><code>/compact</code><span>Compact conversation with optional focus instructions.</span></div>
+      <div class="r"><code>/recap</code><span><strong>New.</strong> Summary of what happened in the session while the terminal was unfocused. Configurable in <code>/config</code>. <span class="src">May 2026</span></span></div>
+      <div class="r"><code>/theme</code><span><strong>New.</strong> Apply or build a custom color theme. Themes ship as plugins. <span class="src">May 2026</span></span></div>
       <div class="r"><code>/btw</code><span>Side question without polluting context.</span></div>
       <div class="r"><code>/rewind</code><span>Rewind conversation and/or code to a previous point, or summarize from a selected message. Alias: <code>/checkpoint</code>.</span></div>
       <div class="r"><code>/branch [name]</code><span>Branch the conversation at this point. Alias: <code>/fork</code>.</span></div>
